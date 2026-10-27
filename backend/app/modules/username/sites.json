@@ -1,0 +1,282 @@
+[
+  {
+    "name": "GitHub",
+    "url": "https://github.com/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Development"
+  },
+  {
+    "name": "GitLab",
+    "url": "https://gitlab.com/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Development"
+  },
+  {
+    "name": "Telegram",
+    "url": "https://t.me/{}",
+    "check_type": "message",
+    "error_msg": "tgme_page_action",
+    "category": "Messaging"
+  },
+  {
+    "name": "Twitter / X",
+    "url": "https://x.com/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Social Media"
+  },
+  {
+    "name": "Reddit",
+    "url": "https://www.reddit.com/user/{}/about.json",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Social Media"
+  },
+  {
+    "name": "Instagram",
+    "url": "https://www.instagram.com/{}/",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Social Media"
+  },
+  {
+    "name": "TikTok",
+    "url": "https://www.tiktok.com/@{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Video & Streaming"
+  },
+  {
+    "name": "Pinterest",
+    "url": "https://www.pinterest.com/{}/",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Social Media"
+  },
+  {
+    "name": "Steam",
+    "url": "https://steamcommunity.com/id/{}",
+    "check_type": "message",
+    "error_msg": "The specified profile could not be found",
+    "category": "Gaming"
+  },
+  {
+    "name": "Twitch",
+    "url": "https://www.twitch.tv/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Video & Streaming"
+  },
+  {
+    "name": "YouTube",
+    "url": "https://www.youtube.com/@{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Video & Streaming"
+  },
+  {
+    "name": "Spotify",
+    "url": "https://open.spotify.com/user/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Music"
+  },
+  {
+    "name": "SoundCloud",
+    "url": "https://soundcloud.com/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Music"
+  },
+  {
+    "name": "Medium",
+    "url": "https://medium.com/@{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Blogging"
+  },
+  {
+    "name": "Substack",
+    "url": "https://{}.substack.com",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Blogging"
+  },
+  {
+    "name": "Dev.to",
+    "url": "https://dev.to/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Development"
+  },
+  {
+    "name": "HackerNews",
+    "url": "https://news.ycombinator.com/user?id={}",
+    "check_type": "message",
+    "error_msg": "No such user.",
+    "category": "Tech News"
+  },
+  {
+    "name": "DockerHub",
+    "url": "https://hub.docker.com/v2/users/{}/",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Development"
+  },
+  {
+    "name": "Patreon",
+    "url": "https://www.patreon.com/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Crowdfunding"
+  },
+  {
+    "name": "Chess.com",
+    "url": "https://api.chess.com/pub/player/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Gaming"
+  },
+  {
+    "name": "Lichess",
+    "url": "https://lichess.org/api/user/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Gaming"
+  },
+  {
+    "name": "Roblox",
+    "url": "https://www.roblox.com/user.aspx?username={}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Gaming"
+  },
+  {
+    "name": "Mastodon Social",
+    "url": "https://mastodon.social/@{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Social Media"
+  },
+  {
+    "name": "Keybase",
+    "url": "https://keybase.io/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Security"
+  },
+  {
+    "name": "Disqus",
+    "url": "https://disqus.com/by/{}/",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Social Media"
+  },
+  {
+    "name": "Vimeo",
+    "url": "https://vimeo.com/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Video & Streaming"
+  },
+  {
+    "name": "Dribbble",
+    "url": "https://dribbble.com/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Design"
+  },
+  {
+    "name": "Behance",
+    "url": "https://www.behance.net/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Design"
+  },
+  {
+    "name": "Linktree",
+    "url": "https://linktr.ee/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Social Media"
+  },
+  {
+    "name": "Flickr",
+    "url": "https://www.flickr.com/people/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Photography"
+  },
+  {
+    "name": "Duolingo",
+    "url": "https://www.duolingo.com/2017-06-30/users?username={}",
+    "check_type": "message",
+    "error_msg": "\"users\":[]",
+    "category": "Education"
+  },
+  {
+    "name": "VK (Vkontakte)",
+    "url": "https://vk.com/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Social Media"
+  },
+  {
+    "name": "Habr",
+    "url": "https://habr.com/ru/users/{}/",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Tech News"
+  },
+  {
+    "name": "ProductHunt",
+    "url": "https://www.producthunt.com/@{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Tech News"
+  },
+  {
+    "name": "Kaggle",
+    "url": "https://www.kaggle.com/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Data Science"
+  },
+  {
+    "name": "About.me",
+    "url": "https://about.me/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Portfolio"
+  },
+  {
+    "name": "Codecademy",
+    "url": "https://www.codecademy.com/profiles/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Education"
+  },
+  {
+    "name": "Giphy",
+    "url": "https://giphy.com/channel/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Media"
+  },
+  {
+    "name": "Bandcamp",
+    "url": "https://{}.bandcamp.com",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Music"
+  },
+  {
+    "name": "Pastebin",
+    "url": "https://pastebin.com/u/{}",
+    "check_type": "status_code",
+    "error_code": 404,
+    "category": "Development"
+  }
+]

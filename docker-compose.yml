@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  omnitrace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: omnitrace
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - DEBUG=false
+      - OMNITRACE_TIMEOUT=8.0
+      - OMNITRACE_MAX_CONCURRENCY=20
+      # Optional: upstream proxy (e.g., Tor SOCKS5 or corporate HTTP proxy)
+      # - OMNITRACE_PROXY=socks5://tor:9050
+      # Optional API Keys
+      # - HIBP_API_KEY=
+      # - SHODAN_API_KEY=
+      # - VIRUSTOTAL_API_KEY=
+    volumes:
+      - omnitrace_data:/app/backend/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Optional Tor Proxy Service for 100% anonymous OPSEC routing
+  # Uncomment below to route traffic through Tor
+  # tor:
+  #   image: dperson/torproxy
+  #   container_name: omnitrace-tor
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9050:9050"
+
+volumes:
+  omnitrace_data:
