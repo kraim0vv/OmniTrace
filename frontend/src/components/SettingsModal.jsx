@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Settings, Shield, Key, Network, Save, CheckCircle2, Lock } from 'lucide-react';
+import { X, Settings, Shield, Key, Save, CheckCircle2 } from 'lucide-react';
 import { getSettings, updateSettings } from '../services/api';
 
 export default function SettingsModal({ isOpen, onClose }) {
@@ -46,54 +46,54 @@ export default function SettingsModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+      <div className="w-full max-w-lg bg-zinc-950 border border-white/10 rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/60">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-zinc-900/40">
           <div className="flex items-center gap-2.5">
-            <Settings className="w-5 h-5 text-cyan-400" />
-            <h3 className="font-bold text-base text-slate-100">
-              OPSEC, Proxies & Module Keys
+            <Settings className="w-4 h-4 text-white" />
+            <h3 className="font-semibold text-sm text-white">
+              OPSEC & Module Configuration
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+            className="p-1 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Body */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto flex-1 flex flex-col gap-5">
-          {/* OPSEC & Anonymity Section */}
+        <form onSubmit={handleSubmit} className="p-5 overflow-y-auto flex-1 flex flex-col gap-5">
+          {/* OPSEC & Anonymity */}
           <div>
-            <div className="flex items-center gap-2 mb-2 text-xs font-semibold uppercase tracking-wider text-cyan-400">
-              <Shield className="w-4 h-4" />
-              <span>Network OPSEC & Proxy Routing</span>
+            <div className="flex items-center gap-2 mb-1.5 text-xs font-semibold uppercase tracking-wider text-white font-mono">
+              <Shield className="w-3.5 h-3.5" />
+              <span>Proxy & Tor Anonymity</span>
             </div>
-            <p className="text-xs text-slate-400 mb-3">
-              Route all investigative traffic through an upstream HTTP, SOCKS5, or Tor proxy to protect your investigator IP address.
+            <p className="text-[11px] text-zinc-400 mb-3 font-mono">
+              Route queries through an upstream HTTP, SOCKS5, or Tor proxy to shield your investigator IP address.
             </p>
 
             <div className="flex flex-col gap-3">
               <div>
-                <label className="text-xs text-slate-300 block mb-1">
-                  Proxy URL (Optional)
+                <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
+                  Upstream Proxy URL (Optional)
                 </label>
                 <input
                   type="text"
                   value={proxyUrl}
                   onChange={(e) => setProxyUrl(e.target.value)}
-                  placeholder="e.g. socks5://127.0.0.1:9050 or http://user:pass@proxy:8080"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-cyan-500"
+                  placeholder="e.g. socks5://127.0.0.1:9050 or http://1.2.3.4:8080"
+                  className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-white/40"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-slate-300 block mb-1">
-                  Request Timeout (Seconds)
+                <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
+                  Timeout (Seconds)
                 </label>
                 <input
                   type="number"
@@ -102,25 +102,25 @@ export default function SettingsModal({ isOpen, onClose }) {
                   max="30"
                   value={timeout}
                   onChange={(e) => setTimeoutVal(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-white/40"
                 />
               </div>
             </div>
           </div>
 
-          {/* Optional API Keys Section */}
-          <div className="pt-4 border-t border-slate-800">
-            <div className="flex items-center gap-2 mb-2 text-xs font-semibold uppercase tracking-wider text-purple-400">
-              <Key className="w-4 h-4" />
-              <span>Optional Deep-Scan API Keys</span>
+          {/* Optional API Keys */}
+          <div className="pt-4 border-t border-white/10">
+            <div className="flex items-center gap-2 mb-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-200 font-mono">
+              <Key className="w-3.5 h-3.5" />
+              <span>Optional API Keys</span>
             </div>
-            <p className="text-xs text-slate-400 mb-3">
-              OmniTrace works 100% out of the box with zero keys. Adding optional personal keys unlocks deeper breach and infrastructure datasets.
+            <p className="text-[11px] text-zinc-400 mb-3 font-mono">
+              OmniTrace functions 100% without keys. Adding personal keys enables optional deep dataset enrichment.
             </p>
 
             <div className="flex flex-col gap-3">
               <div>
-                <label className="text-xs text-slate-300 block mb-1">
+                <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
                   HaveIBeenPwned API Key
                 </label>
                 <input
@@ -128,12 +128,12 @@ export default function SettingsModal({ isOpen, onClose }) {
                   value={hibpKey}
                   onChange={(e) => setHibpKey(e.target.value)}
                   placeholder="Paste HIBP key..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-white/40"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-slate-300 block mb-1">
+                <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
                   Shodan API Key
                 </label>
                 <input
@@ -141,12 +141,12 @@ export default function SettingsModal({ isOpen, onClose }) {
                   value={shodanKey}
                   onChange={(e) => setShodanKey(e.target.value)}
                   placeholder="Paste Shodan key..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-white/40"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-slate-300 block mb-1">
+                <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
                   VirusTotal API Key
                 </label>
                 <input
@@ -154,30 +154,30 @@ export default function SettingsModal({ isOpen, onClose }) {
                   value={vtKey}
                   onChange={(e) => setVtKey(e.target.value)}
                   placeholder="Paste VirusTotal key..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-white/40"
                 />
               </div>
             </div>
           </div>
 
           {/* Footer Save */}
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-[11px] text-slate-500 font-mono">
-              Stored locally on your machine
+          <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+            <span className="text-[11px] text-zinc-500 font-mono">
+              Stored locally on host
             </span>
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs shadow-lg transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2 rounded bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs transition-colors disabled:opacity-50"
             >
               {savedSuccess ? (
                 <>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-950" />
-                  <span>Saved!</span>
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Saved</span>
                 </>
               ) : (
                 <>
-                  <Save className="w-4 h-4" />
+                  <Save className="w-3.5 h-3.5" />
                   <span>Save Configuration</span>
                 </>
               )}

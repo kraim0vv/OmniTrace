@@ -1,14 +1,11 @@
 import React from 'react';
 import { 
-  Radar, 
   FolderLock, 
   Settings, 
-  Share2, 
   Download, 
-  ShieldCheck, 
   Network, 
   ListFilter,
-  Code2
+  Circle
 } from 'lucide-react';
 
 export default function Navbar({ 
@@ -22,60 +19,58 @@ export default function Navbar({
   hasResults
 }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-[#080c14]/90 backdrop-blur-md px-4 lg:px-8 py-3">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#09090b]/80 backdrop-blur-xl px-4 lg:px-8 py-3.5">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
-        {/* Brand & Status */}
-        <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-sky-400 p-0.5 shadow-lg shadow-cyan-500/20">
-            <div className="w-full h-full bg-[#090d16] rounded-[10px] flex items-center justify-center">
-              <Radar className={`w-5 h-5 text-cyan-400 ${isScanning ? 'animate-spin' : ''}`} />
-            </div>
+        {/* Brand & Minimalist Logo */}
+        <div className="flex items-center gap-3.5">
+          <div className="relative flex items-center justify-center w-9 h-9 rounded-lg bg-zinc-900 border border-white/15 p-1.5 shadow-sm">
+            <img src="/logo.svg" alt="OmniTrace Logo" className="w-full h-full object-contain filter invert-0" />
             {isScanning && (
-              <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
               </span>
             )}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-slate-100 via-sky-200 to-cyan-400 bg-clip-text text-transparent">
+              <span className="font-semibold text-base tracking-tight text-white">
                 OmniTrace
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/80 border border-cyan-800/50 text-cyan-400 font-medium">
-                v1.0 OSINT
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-white/10 font-medium">
+                v1.1
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 hidden sm:block">
-              Open-Source Browser Intelligence & Entity Investigator
+            <p className="text-[11px] text-zinc-400 hidden sm:block font-mono tracking-tight">
+              Open-Source OSINT Reconnaissance Framework
             </p>
           </div>
         </div>
 
-        {/* View Switcher (Feed vs Relationship Graph) */}
-        <div className="flex items-center bg-slate-900/90 p-1 rounded-xl border border-slate-800">
+        {/* View Switcher (Feed vs Link Graph) */}
+        <div className="flex items-center bg-zinc-900/90 p-1 rounded-lg border border-white/10">
           <button
             onClick={() => setActiveTab('feed')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               activeTab === 'feed'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                ? 'bg-white text-zinc-950 font-semibold shadow-sm'
+                : 'text-zinc-400 hover:text-white hover:bg-zinc-800/60'
             }`}
           >
             <ListFilter className="w-3.5 h-3.5" />
-            <span>Feed & Intel</span>
+            <span>Feed</span>
           </button>
           <button
             onClick={() => setActiveTab('graph')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               activeTab === 'graph'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                ? 'bg-white text-zinc-950 font-semibold shadow-sm'
+                : 'text-zinc-400 hover:text-white hover:bg-zinc-800/60'
             }`}
           >
             <Network className="w-3.5 h-3.5" />
-            <span>Link Graph</span>
+            <span>Graph</span>
           </button>
         </div>
 
@@ -84,10 +79,10 @@ export default function Navbar({
           {/* Active Case Tag */}
           <button
             onClick={onOpenCases}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-xs text-slate-300 transition-colors"
-            title="Manage Cases & Investigations"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 hover:border-white/20 text-xs text-zinc-300 hover:text-white transition-colors"
+            title="Cases & Investigations"
           >
-            <FolderLock className="w-3.5 h-3.5 text-cyan-400" />
+            <FolderLock className="w-3.5 h-3.5 text-zinc-400" />
             <span className="max-w-[120px] truncate hidden md:inline">
               {activeCase ? activeCase.name : 'Default Case'}
             </span>
@@ -99,8 +94,8 @@ export default function Navbar({
             disabled={!hasResults}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
               hasResults
-                ? 'bg-slate-900 border-slate-800 hover:border-cyan-500/40 text-slate-200 hover:text-cyan-300'
-                : 'opacity-40 cursor-not-allowed bg-slate-900/40 border-slate-800/50 text-slate-500'
+                ? 'bg-zinc-900 border-white/10 hover:border-white/30 text-zinc-200 hover:text-white'
+                : 'opacity-40 cursor-not-allowed bg-zinc-950 border-white/5 text-zinc-600'
             }`}
             title="Export Report (HTML / JSON / CSV)"
           >
@@ -111,7 +106,7 @@ export default function Navbar({
           {/* Settings / OPSEC */}
           <button
             onClick={onOpenSettings}
-            className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 transition-colors"
+            className="p-2 rounded-lg bg-zinc-900 border border-white/10 hover:border-white/25 text-zinc-400 hover:text-white transition-colors"
             title="OPSEC, Proxies & API Keys"
           >
             <Settings className="w-4 h-4" />
@@ -122,7 +117,7 @@ export default function Navbar({
             href="https://github.com/kraim0v/OmniTrace"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 transition-colors"
+            className="p-2 rounded-lg bg-zinc-900 border border-white/10 hover:border-white/25 text-zinc-400 hover:text-white transition-colors"
             title="View on GitHub"
           >
             <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">

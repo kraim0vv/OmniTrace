@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { ZoomIn, ZoomOut, Maximize2, RotateCcw, Info, ExternalLink } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, ExternalLink } from 'lucide-react';
 
 export default function GraphView({ target, targetType, findings = [] }) {
   const canvasRef = useRef(null);
@@ -9,7 +9,6 @@ export default function GraphView({ target, targetType, findings = [] }) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  // Filter only found or interesting findings
   const relevantFindings = findings.filter(
     (f) => f.status === 'found' || f.status === 'info'
   );
@@ -21,15 +20,14 @@ export default function GraphView({ target, targetType, findings = [] }) {
     const width = canvas.width;
     const height = canvas.height;
 
-    // Clear
     ctx.clearRect(0, 0, width, height);
 
     ctx.save();
     ctx.translate(width / 2 + offset.x, height / 2 + offset.y);
     ctx.scale(zoom, zoom);
 
-    // Draw grid
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
+    // Minimal grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
     ctx.lineWidth = 1;
     const gridSize = 40;
     for (let x = -width; x < width; x += gridSize) {
@@ -56,64 +54,57 @@ export default function GraphView({ target, targetType, findings = [] }) {
       const nx = Math.cos(angle) * radius;
       const ny = Math.sin(angle) * radius;
 
-      // Draw connection edge line
+      // Clean white connection line
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
       ctx.lineTo(nx, ny);
-      ctx.strokeStyle = f.status === 'found' ? 'rgba(16, 185, 129, 0.4)' : 'rgba(56, 189, 248, 0.3)';
+      ctx.strokeStyle = f.status === 'found' ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.1)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // Peripheral node circle
+      ctx.beginPath();
+      ctx.arc(nx, ny, 14, 0, 2 * Math.PI);
+      ctx.fillStyle = f.status === 'found' ? '#18181b' : '#09090b';
+      ctx.fill();
+      ctx.strokeStyle = f.status === 'found' ? '#ffffff' : '#52525b';
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Node shadow
-      ctx.shadowColor = f.status === 'found' ? 'rgba(16, 185, 129, 0.6)' : 'rgba(56, 189, 248, 0.5)';
-      ctx.shadowBlur = 10;
-
-      // Draw peripheral node circle
-      ctx.beginPath();
-      ctx.arc(nx, ny, 16, 0, 2 * Math.PI);
-      ctx.fillStyle = f.status === 'found' ? '#064e3b' : '#0c4a6e';
-      ctx.fill();
-      ctx.strokeStyle = f.status === 'found' ? '#10b981' : '#38bdf8';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.shadowBlur = 0; // reset shadow
-
-      // Peripheral Label
-      ctx.fillStyle = '#f1f5f9';
-      ctx.font = '11px Inter, sans-serif';
+      // Node Label
+      ctx.fillStyle = '#e4e4e7';
+      ctx.font = '11px JetBrains Mono, monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       const label = f.source || 'Item';
-      ctx.fillText(label, nx, ny + 28);
+      ctx.fillText(label, nx, ny + 24);
     });
 
-    // Draw Central Target Node
-    ctx.shadowColor = 'rgba(56, 189, 248, 0.8)';
-    ctx.shadowBlur = 20;
+    // Draw Central Target Node (High-Contrast White)
+    ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
+    ctx.shadowBlur = 15;
 
     ctx.beginPath();
-    ctx.arc(centerX, centerY, 32, 0, 2 * Math.PI);
-    ctx.fillStyle = '#0f172a';
+    ctx.arc(centerX, centerY, 30, 0, 2 * Math.PI);
+    ctx.fillStyle = '#ffffff';
     ctx.fill();
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#27272a';
+    ctx.lineWidth = 2;
     ctx.stroke();
 
     ctx.shadowBlur = 0;
 
     // Center Node Label
-    ctx.fillStyle = '#38bdf8';
-    ctx.font = 'bold 12px JetBrains Mono, monospace';
+    ctx.fillStyle = '#09090b';
+    ctx.font = 'bold 11px JetBrains Mono, monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const displayTarget = target ? (target.length > 10 ? target.slice(0, 9) + '…' : target) : 'TARGET';
+    const displayTarget = target ? (target.length > 9 ? target.slice(0, 8) + '…' : target) : 'TARGET';
     ctx.fillText(displayTarget, centerX, centerY);
 
     ctx.restore();
   }, [relevantFindings, target, zoom, offset]);
 
-  // Click on canvas to select node
   const handleCanvasClick = (e) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -133,7 +124,7 @@ export default function GraphView({ target, targetType, findings = [] }) {
       const nx = Math.cos(angle) * radius;
       const ny = Math.sin(angle) * radius;
       const dist = Math.hypot(scaledX - nx, scaledY - ny);
-      if (dist <= 20) {
+      if (dist <= 18) {
         clicked = f;
       }
     });
@@ -157,43 +148,45 @@ export default function GraphView({ target, targetType, findings = [] }) {
   const handleMouseUp = () => setIsDragging(false);
 
   return (
-    <div className="w-full max-w-4xl mx-auto glass-panel rounded-2xl p-4 border border-cyan-500/20 relative overflow-hidden">
+    <div className="w-full max-w-4xl mx-auto mono-panel rounded-xl p-4 border border-white/10 relative overflow-hidden">
       {/* Graph Toolbar */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm text-slate-200">Investigation Relationship Graph</span>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-400 font-mono">
-            {relevantFindings.length} active nodes
+          <span className="font-semibold text-xs uppercase tracking-wider text-white font-mono">
+            Relationship Graph
+          </span>
+          <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono border border-white/10">
+            {relevantFindings.length} Nodes
           </span>
         </div>
 
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setZoom((z) => Math.min(z + 0.2, 2.5))}
-            className="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
+            className="p-1.5 rounded bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
             title="Zoom In"
           >
-            <ZoomIn className="w-4 h-4" />
+            <ZoomIn className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => setZoom((z) => Math.max(z - 0.2, 0.4))}
-            className="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
+            className="p-1.5 rounded bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
             title="Zoom Out"
           >
-            <ZoomOut className="w-4 h-4" />
+            <ZoomOut className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => { setZoom(1); setOffset({ x: 0, y: 0 }); }}
-            className="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
-            title="Reset View"
+            className="p-1.5 rounded bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
+            title="Reset"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
       {/* Canvas Viewport */}
-      <div className="relative w-full h-[500px] bg-[#070b12] rounded-xl overflow-hidden border border-slate-800 cursor-grab active:cursor-grabbing">
+      <div className="relative w-full h-[500px] bg-[#09090b] rounded-lg overflow-hidden border border-white/10 cursor-grab active:cursor-grabbing">
         <canvas
           ref={canvasRef}
           width={800}
@@ -207,30 +200,30 @@ export default function GraphView({ target, targetType, findings = [] }) {
 
         {/* Selected Node Details Floating Popup */}
         {selectedNode && (
-          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-80 bg-slate-900/95 backdrop-blur-md p-4 rounded-xl border border-cyan-500/40 shadow-2xl animate-fadeIn">
+          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-80 bg-zinc-950/95 backdrop-blur-md p-4 rounded-lg border border-white/20 shadow-2xl animate-fadeIn">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="font-bold text-sm text-cyan-300">{selectedNode.source}</span>
+              <span className="font-bold text-xs text-white font-mono">{selectedNode.source}</span>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="text-slate-400 hover:text-slate-200 text-xs"
+                className="text-zinc-500 hover:text-white text-xs"
               >
                 ✕
               </button>
             </div>
-            <div className="text-xs text-slate-200 font-semibold mb-1">
+            <div className="text-xs text-zinc-200 font-medium mb-1">
               {selectedNode.title || 'Connected Entity'}
             </div>
-            <p className="text-[11px] text-slate-400 mb-2">
-              {selectedNode.description || 'No additional summary available.'}
+            <p className="text-[11px] text-zinc-400 mb-2 font-mono">
+              {selectedNode.description || 'No description available.'}
             </p>
             {selectedNode.url && (
               <a
                 href={selectedNode.url}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-cyan-400 hover:underline font-mono"
+                className="inline-flex items-center gap-1 text-xs text-white hover:underline font-mono"
               >
-                <span>Visit Source Profile</span>
+                <span>Visit Source</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
             )}
@@ -238,8 +231,8 @@ export default function GraphView({ target, targetType, findings = [] }) {
         )}
       </div>
 
-      <div className="mt-2 text-center text-xs text-slate-500 font-mono">
-        Drag to pan • Click any node to inspect relationship • Mouse wheel / buttons to zoom
+      <div className="mt-2 text-center text-[11px] text-zinc-500 font-mono">
+        Drag to navigate • Click nodes to view details
       </div>
     </div>
   );

@@ -104,7 +104,7 @@ def detect_entity(query: str) -> DetectionResult:
             detected_type=TargetType.DOMAIN,
             confidence=0.95,
             normalized_value=domain_candidate.lower(),
-            recommended_modules=["dns_lookup", "crt_subdomains", "whois_lookup", "geo_ip"],
+            recommended_modules=["dns_lookup", "crt_subdomains", "whois_lookup", "geo_ip", "http_headers"],
             details={"apex_domain": domain_candidate.lower()}
         )
 

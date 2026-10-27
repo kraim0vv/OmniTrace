@@ -1,13 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { Filter, Search, CheckCircle2, XCircle, AlertCircle, Sparkles, Inbox } from 'lucide-react';
+import { Search, CheckCircle2, XCircle, AlertCircle, Inbox, Loader2 } from 'lucide-react';
 import ResultCard from './ResultCard';
 
 export default function ResultsStream({ findings = [], isScanning }) {
-  const [statusFilter, setStatusFilter] = useState('found'); // Default to found for best UX!
+  const [statusFilter, setStatusFilter] = useState('found');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  // Extract unique categories
   const categories = useMemo(() => {
     const set = new Set();
     findings.forEach((f) => {
@@ -16,7 +15,6 @@ export default function ResultsStream({ findings = [], isScanning }) {
     return Array.from(set);
   }, [findings]);
 
-  // Counts
   const counts = useMemo(() => {
     let found = 0;
     let notFound = 0;
@@ -29,18 +27,14 @@ export default function ResultsStream({ findings = [], isScanning }) {
     return { all: findings.length, found, notFound, errors };
   }, [findings]);
 
-  // Filtered findings
   const filteredFindings = useMemo(() => {
     return findings.filter((f) => {
-      // Status filter
       if (statusFilter !== 'all') {
         if (statusFilter === 'found' && f.status !== 'found') return false;
         if (statusFilter === 'not_found' && f.status !== 'not_found') return false;
         if (statusFilter === 'errors' && !['error', 'rate_limited'].includes(f.status)) return false;
       }
-      // Category filter
       if (categoryFilter !== 'all' && f.category !== categoryFilter) return false;
-      // Search term
       if (searchTerm.trim()) {
         const query = searchTerm.toLowerCase();
         const matchSource = f.source?.toLowerCase().includes(query);
@@ -56,7 +50,7 @@ export default function ResultsStream({ findings = [], isScanning }) {
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-800/80">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
         
         {/* Status Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
@@ -64,13 +58,14 @@ export default function ResultsStream({ findings = [], isScanning }) {
             onClick={() => setStatusFilter('found')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               statusFilter === 'found'
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800'
+                ? 'bg-white text-zinc-950 shadow-sm'
+                : 'text-zinc-400 hover:text-white bg-zinc-900 border border-white/5'
             }`}
           >
-            <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Found</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-emerald-950 text-emerald-400 text-[10px] font-mono">
+            <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              statusFilter === 'found' ? 'bg-zinc-200 text-zinc-950 font-bold' : 'bg-zinc-800 text-zinc-300'
+            }`}>
               {counts.found}
             </span>
           </button>
@@ -79,12 +74,14 @@ export default function ResultsStream({ findings = [], isScanning }) {
             onClick={() => setStatusFilter('all')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               statusFilter === 'all'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800'
+                ? 'bg-white text-zinc-950 font-semibold shadow-sm'
+                : 'text-zinc-400 hover:text-white bg-zinc-900 border border-white/5'
             }`}
           >
             <span>All Checks</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 text-[10px] font-mono">
+            <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              statusFilter === 'all' ? 'bg-zinc-200 text-zinc-950 font-bold' : 'bg-zinc-800 text-zinc-300'
+            }`}>
               {counts.all}
             </span>
           </button>
@@ -93,13 +90,14 @@ export default function ResultsStream({ findings = [], isScanning }) {
             onClick={() => setStatusFilter('not_found')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               statusFilter === 'not_found'
-                ? 'bg-slate-700/50 text-slate-200 border border-slate-600 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800'
+                ? 'bg-white text-zinc-950 font-semibold shadow-sm'
+                : 'text-zinc-400 hover:text-white bg-zinc-900 border border-white/5'
             }`}
           >
-            <XCircle className="w-3.5 h-3.5" />
             <span>Not Found</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-400 text-[10px] font-mono">
+            <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              statusFilter === 'not_found' ? 'bg-zinc-200 text-zinc-950 font-bold' : 'bg-zinc-800 text-zinc-300'
+            }`}>
               {counts.notFound}
             </span>
           </button>
@@ -108,13 +106,14 @@ export default function ResultsStream({ findings = [], isScanning }) {
             onClick={() => setStatusFilter('errors')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               statusFilter === 'errors'
-                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800'
+                ? 'bg-white text-zinc-950 font-semibold shadow-sm'
+                : 'text-zinc-400 hover:text-white bg-zinc-900 border border-white/5'
             }`}
           >
-            <AlertCircle className="w-3.5 h-3.5" />
             <span>Errors</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full bg-rose-950 text-rose-400 text-[10px] font-mono">
+            <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              statusFilter === 'errors' ? 'bg-zinc-200 text-zinc-950 font-bold' : 'bg-zinc-800 text-zinc-300'
+            }`}>
               {counts.errors}
             </span>
           </button>
@@ -122,12 +121,11 @@ export default function ResultsStream({ findings = [], isScanning }) {
 
         {/* Right Search Input & Category Filter */}
         <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-          {/* Category Dropdown */}
           {categories.length > 1 && (
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-cyan-500"
+              className="bg-zinc-900 border border-white/10 text-zinc-300 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-white/30 font-mono"
             >
               <option value="all">All Categories</option>
               {categories.map((c) => (
@@ -138,15 +136,14 @@ export default function ResultsStream({ findings = [], isScanning }) {
             </select>
           )}
 
-          {/* Quick Filter Search */}
           <div className="relative flex items-center">
-            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 pointer-events-none" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Filter results..."
-              className="bg-slate-900 border border-slate-800 pl-8 pr-3 py-1.5 text-xs rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 w-36 sm:w-44 font-mono"
+              className="bg-zinc-900 border border-white/10 pl-8 pr-3 py-1.5 text-xs rounded-lg text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-white/30 w-36 sm:w-44 font-mono"
             />
           </div>
         </div>
@@ -154,29 +151,29 @@ export default function ResultsStream({ findings = [], isScanning }) {
 
       {/* Results List */}
       {filteredFindings.length > 0 ? (
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2">
           {filteredFindings.map((finding) => (
             <ResultCard key={finding.id} finding={finding} />
           ))}
         </div>
       ) : (
-        <div className="glass-panel rounded-2xl p-12 text-center border border-slate-800/80 my-8">
-          <div className="w-12 h-12 rounded-2xl bg-slate-800/80 border border-slate-700 mx-auto flex items-center justify-center text-slate-400 mb-3">
+        <div className="mono-panel rounded-xl p-12 text-center border border-white/10 my-6">
+          <div className="w-10 h-10 rounded-lg bg-zinc-900 border border-white/10 mx-auto flex items-center justify-center text-zinc-400 mb-3">
             {isScanning ? (
-              <Sparkles className="w-6 h-6 text-cyan-400 animate-spin" />
+              <Loader2 className="w-5 h-5 text-white animate-spin" />
             ) : (
-              <Inbox className="w-6 h-6 text-slate-500" />
+              <Inbox className="w-5 h-5 text-zinc-500" />
             )}
           </div>
-          <h3 className="text-base font-semibold text-slate-200">
-            {isScanning ? 'Investigating Target...' : 'No Findings in this View'}
+          <h3 className="text-sm font-semibold text-white">
+            {isScanning ? 'Querying Target Across 130+ Sources...' : 'No Findings in this View'}
           </h3>
-          <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1">
+          <p className="text-xs text-zinc-400 max-w-sm mx-auto mt-1 font-mono">
             {isScanning
-              ? 'Real-time OSINT modules are querying sources. As verified profiles and records appear, they will stream here.'
+              ? 'Asynchronous probes are streaming findings directly from public sources.'
               : statusFilter === 'found' && counts.found === 0 && counts.all > 0
-              ? 'No confirmed accounts found yet. Try switching filter to "All Checks" to view full audit logs.'
-              : 'Enter a target identifier above to initiate reconnaissance.'}
+              ? 'No confirmed matches yet. Select "All Checks" to view full audit logs.'
+              : 'Enter a target query above to initiate automated reconnaissance.'}
           </p>
         </div>
       )}

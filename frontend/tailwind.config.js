@@ -8,36 +8,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#090d16',
-        surface: '#0f172a',
-        surfaceHover: '#1e293b',
-        border: '#1e293b',
-        primary: {
-          DEFAULT: '#38bdf8',
-          hover: '#0284c7',
-        },
-        cyber: {
-          cyan: '#00f2fe',
-          blue: '#4facfe',
-          emerald: '#10b981',
-          purple: '#a855f7',
-          rose: '#f43f5e',
-          amber: '#f59e0b',
+        background: '#09090b',
+        surface: '#121215',
+        surfaceHover: '#18181b',
+        border: '#27272a',
+        zinc: {
+          850: '#1c1c20',
+          950: '#0c0c0e',
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
-      animation: {
-        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'glow': 'glow 2s ease-in-out infinite alternate',
-      },
-      keyframes: {
-        glow: {
-          '0%': { boxShadow: '0 0 5px rgba(56, 189, 248, 0.2)' },
-          '100%': { boxShadow: '0 0 20px rgba(56, 189, 248, 0.6)' },
-        }
+      boxShadow: {
+        'glow-white': '0 0 20px -2px rgba(255, 255, 255, 0.15)',
+        'subtle': '0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(0, 0, 0, 0.5)',
       }
     },
   },

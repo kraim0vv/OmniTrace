@@ -18,6 +18,7 @@ from app.modules.email.validator import EmailValidatorModule
 from app.modules.network.crt_subdomains import CrtSubdomainsModule
 from app.modules.network.dns_lookup import DnsLookupModule
 from app.modules.network.geo_ip import GeoIpModule
+from app.modules.network.http_headers import HttpHeadersModule
 from app.modules.network.whois_lookup import WhoisLookupModule
 from app.modules.phone.phonelookup import PhoneLookupModule
 from app.modules.username.hunter import UsernameHunterModule
@@ -33,6 +34,7 @@ class ScanEngine:
             "whois_lookup": WhoisLookupModule(),
             "crt_subdomains": CrtSubdomainsModule(),
             "geo_ip": GeoIpModule(),
+            "http_headers": HttpHeadersModule(),
             "phone_lookup": PhoneLookupModule(),
             "hibp_breach": HibpBreachModule(),
         }

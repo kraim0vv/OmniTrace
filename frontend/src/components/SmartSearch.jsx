@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Search, 
-  Sparkles, 
   SlidersHorizontal, 
-  CheckCircle2, 
-  AlertCircle, 
   StopCircle, 
   User, 
   Mail, 
@@ -12,25 +9,26 @@ import {
   Radio, 
   Phone, 
   Key,
-  X
+  X,
+  ArrowRight
 } from 'lucide-react';
 import { detectEntity } from '../services/api';
 
 const TYPE_ICONS = {
-  username: <User className="w-3.5 h-3.5 text-sky-400" />,
-  email: <Mail className="w-3.5 h-3.5 text-purple-400" />,
-  domain: <Globe className="w-3.5 h-3.5 text-emerald-400" />,
-  ip: <Radio className="w-3.5 h-3.5 text-amber-400" />,
-  phone: <Phone className="w-3.5 h-3.5 text-rose-400" />,
-  hash: <Key className="w-3.5 h-3.5 text-cyan-400" />,
-  unknown: <Search className="w-3.5 h-3.5 text-slate-400" />,
+  username: <User className="w-3.5 h-3.5 text-zinc-300" />,
+  email: <Mail className="w-3.5 h-3.5 text-zinc-300" />,
+  domain: <Globe className="w-3.5 h-3.5 text-zinc-300" />,
+  ip: <Radio className="w-3.5 h-3.5 text-zinc-300" />,
+  phone: <Phone className="w-3.5 h-3.5 text-zinc-300" />,
+  hash: <Key className="w-3.5 h-3.5 text-zinc-300" />,
+  unknown: <Search className="w-3.5 h-3.5 text-zinc-500" />,
 };
 
 const PRESETS = [
   { label: 'Username', value: 'torvalds' },
-  { label: 'Email', value: 'support@github.com' },
-  { label: 'Domain', value: 'cloudflare.com' },
-  { label: 'IP', value: '8.8.8.8' },
+  { label: 'Email', value: 'contact@cloudflare.com' },
+  { label: 'Domain', value: 'python.org' },
+  { label: 'IP', value: '1.1.1.1' },
   { label: 'Phone', value: '+14155552671' },
 ];
 
@@ -62,7 +60,7 @@ export default function SmartSearch({
       } catch (err) {
         console.error('Detection error:', err);
       }
-    }, 250);
+    }, 200);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -92,22 +90,22 @@ export default function SmartSearch({
   return (
     <div className="w-full max-w-4xl mx-auto mb-8">
       {/* Search Bar Container */}
-      <div className="relative glass-panel rounded-2xl p-2 sm:p-3 shadow-2xl border border-cyan-500/20">
+      <div className="relative mono-panel rounded-xl p-2.5 shadow-2xl border border-white/10">
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-2">
           
           {/* Main Input Box */}
           <div className="relative flex-1 w-full flex items-center">
-            <div className="absolute left-3.5 text-slate-400 flex items-center pointer-events-none">
-              <Search className="w-5 h-5 text-cyan-400" />
+            <div className="absolute left-3.5 text-zinc-400 flex items-center pointer-events-none">
+              <Search className="w-4 h-4 text-zinc-400" />
             </div>
 
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Enter Target: username, email, phone, domain, IP, or hash..."
+              placeholder="Query identifier: username, email, phone, domain, IP, or hash..."
               disabled={isScanning}
-              className="w-full pl-11 pr-24 py-3 bg-slate-900/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm sm:text-base font-mono focus:outline-none focus:ring-2 focus:ring-cyan-500/50 border border-slate-800 disabled:opacity-60 transition-all"
+              className="w-full pl-10 pr-28 py-3 bg-zinc-950/90 rounded-lg text-white placeholder-zinc-500 text-sm font-mono focus:outline-none focus:ring-1 focus:ring-white/40 border border-white/10 disabled:opacity-60 transition-all"
             />
 
             {/* Clear button if has text */}
@@ -115,17 +113,17 @@ export default function SmartSearch({
               <button
                 type="button"
                 onClick={() => { setQuery(''); setDetection(null); }}
-                className="absolute right-14 text-slate-400 hover:text-slate-200 p-1"
+                className="absolute right-20 text-zinc-400 hover:text-white p-1"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
 
-            {/* Entity Detection Pill */}
+            {/* Entity Detection Badge */}
             {detection && (
-              <div className="absolute right-3.5 flex items-center gap-1.5 px-2 py-1 rounded-md bg-slate-800/90 border border-slate-700 text-xs font-mono">
+              <div className="absolute right-3 flex items-center gap-1.5 px-2 py-0.5 rounded bg-zinc-800 border border-white/10 text-[11px] font-mono text-zinc-200">
                 {TYPE_ICONS[detection.detected_type] || TYPE_ICONS.unknown}
-                <span className="uppercase font-semibold text-[11px] text-slate-300">
+                <span className="uppercase font-semibold">
                   {detection.detected_type}
                 </span>
               </div>
@@ -138,16 +136,16 @@ export default function SmartSearch({
             <button
               type="button"
               onClick={() => setShowModuleSelector(!showModuleSelector)}
-              className={`p-3 rounded-xl border transition-colors flex items-center gap-1.5 text-xs font-medium ${
+              className={`p-3 rounded-lg border transition-colors flex items-center gap-1.5 text-xs font-medium ${
                 showModuleSelector || selectedModules.length > 0
-                  ? 'bg-cyan-500/10 border-cyan-500/40 text-cyan-300'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                  ? 'bg-zinc-800 border-white/30 text-white'
+                  : 'bg-zinc-950 border-white/10 text-zinc-400 hover:text-white hover:border-white/20'
               }`}
-              title="Select Modules"
+              title="Modules"
             >
               <SlidersHorizontal className="w-4 h-4" />
               {selectedModules.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-cyan-500/30 text-cyan-200 text-[10px]">
+                <span className="px-1.5 py-0.2 rounded-full bg-white text-zinc-950 text-[10px] font-bold">
                   {selectedModules.length}
                 </span>
               )}
@@ -158,19 +156,19 @@ export default function SmartSearch({
               <button
                 type="button"
                 onClick={onStopScan}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-sm font-semibold shadow-lg shadow-rose-600/30 transition-all"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold border border-white/20 transition-all"
               >
-                <StopCircle className="w-4 h-4" />
+                <StopCircle className="w-4 h-4 text-rose-400" />
                 <span>Abort Scan</span>
               </button>
             ) : (
               <button
                 type="submit"
                 disabled={!query.trim()}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-cyan-400 hover:to-sky-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs shadow-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <Sparkles className="w-4 h-4 text-slate-950" />
                 <span>Investigate</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
@@ -178,15 +176,15 @@ export default function SmartSearch({
 
         {/* Modules Multi-Select Drawer */}
         {showModuleSelector && (
-          <div className="mt-3 p-4 bg-slate-900/95 border border-slate-800 rounded-xl animate-fadeIn">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Active OSINT Modules ({availableModules.length})
+          <div className="mt-3 p-4 bg-zinc-950 border border-white/10 rounded-lg animate-fadeIn">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-white/5">
+              <span className="text-xs font-semibold text-zinc-300 uppercase tracking-wider font-mono">
+                Active Modules ({availableModules.length})
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedModules([])}
-                className="text-xs text-cyan-400 hover:underline"
+                className="text-xs text-zinc-400 hover:text-white underline font-mono"
               >
                 Reset to Auto-Recommend
               </button>
@@ -200,19 +198,19 @@ export default function SmartSearch({
                     onClick={() => toggleModule(mod.id)}
                     className={`flex items-start gap-2.5 p-2 rounded-lg border cursor-pointer text-xs transition-colors ${
                       isSelected
-                        ? 'bg-cyan-950/40 border-cyan-500/40 text-cyan-200'
-                        : 'bg-slate-950/60 border-slate-800/80 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                        ? 'bg-zinc-800 border-white/40 text-white'
+                        : 'bg-zinc-900/60 border-white/5 text-zinc-400 hover:border-white/20 hover:text-zinc-200'
                     }`}
                   >
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => {}}
-                      className="mt-0.5 rounded border-slate-700 text-cyan-500 focus:ring-0"
+                      className="mt-0.5 rounded border-zinc-700 text-white focus:ring-0"
                     />
                     <div>
-                      <div className="font-semibold text-slate-200">{mod.name}</div>
-                      <div className="text-[11px] text-slate-500 line-clamp-1">{mod.description}</div>
+                      <div className="font-semibold text-zinc-200">{mod.name}</div>
+                      <div className="text-[11px] text-zinc-500 line-clamp-1">{mod.description}</div>
                     </div>
                   </div>
                 );
@@ -221,25 +219,25 @@ export default function SmartSearch({
           </div>
         )}
 
-        {/* Presets / Demo Targets */}
-        <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between flex-wrap gap-2 text-xs">
-          <div className="flex items-center gap-1.5 text-slate-500">
-            <span>Quick targets:</span>
+        {/* Presets & Info */}
+        <div className="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between flex-wrap gap-2 text-xs">
+          <div className="flex items-center gap-1.5 text-zinc-400">
+            <span className="text-zinc-500 font-mono text-[11px]">Presets:</span>
             {PRESETS.map((p) => (
               <button
                 key={p.value}
                 type="button"
                 onClick={() => handlePresetClick(p.value)}
-                className="px-2 py-0.5 rounded bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-cyan-300 font-mono transition-colors"
+                className="px-2 py-0.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white font-mono text-[11px] transition-colors border border-white/5"
               >
                 {p.value}
               </button>
             ))}
           </div>
 
-          <div className="text-[11px] text-slate-500 font-mono flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
-            Zero Setup • Full OPSEC • 100% Client/Self-Hosted
+          <div className="text-[11px] text-zinc-500 font-mono flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
+            <span>130+ Sources • Local & Self-Hosted • Zero External Logs</span>
           </div>
         </div>
       </div>

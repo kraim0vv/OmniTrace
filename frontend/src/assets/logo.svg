@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Outer precision reticle ring -->
+  <circle cx="50" cy="50" r="44" stroke="#ffffff" stroke-width="2" stroke-opacity="0.25" stroke-dasharray="4 6"/>
+  
+  <!-- Optical aperture brackets -->
+  <path d="M 22 36 C 22 26 26 22 36 22" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 64 22 C 74 22 78 26 78 36" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 78 64 C 78 74 74 78 64 78" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 36 78 C 26 78 22 74 22 64" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Central radar / trace ring -->
+  <circle cx="50" cy="50" r="24" stroke="#ffffff" stroke-width="2" stroke-opacity="0.8"/>
+  <circle cx="50" cy="50" r="14" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="3 3"/>
+  
+  <!-- Focal core -->
+  <circle cx="50" cy="50" r="5" fill="#ffffff"/>
+  
+  <!-- Precision crosshairs -->
+  <line x1="50" y1="12" x2="50" y2="20" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="50" y1="80" x2="50" y2="88" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="12" y1="50" x2="20" y2="50" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="80" y1="50" x2="88" y2="50" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
