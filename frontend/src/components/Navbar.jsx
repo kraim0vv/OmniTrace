@@ -38,9 +38,6 @@ export default function Navbar({
               <span className="font-semibold text-base tracking-tight text-white">
                 OmniTrace
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-white/10 font-medium">
-                v1.1
-              </span>
             </div>
             <p className="text-[11px] text-zinc-400 hidden sm:block font-mono tracking-tight">
               Open-Source OSINT Reconnaissance Framework

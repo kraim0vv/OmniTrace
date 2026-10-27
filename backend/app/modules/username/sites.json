@@ -1,98 +1,209 @@
 [
-  { "name": "GitHub", "url": "https://github.com/{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "GitLab", "url": "https://gitlab.com/{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "Bitbucket", "url": "https://bitbucket.org/{}/", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "Codeberg", "url": "https://codeberg.org/{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "SourceForge", "url": "https://sourceforge.net/u/{}/profile/", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "DockerHub", "url": "https://hub.docker.com/v2/users/{}/", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "Dev.to", "url": "https://dev.to/{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "HackerNews", "url": "https://news.ycombinator.com/user?id={}", "check_type": "message", "error_msg": "No such user.", "category": "Tech News" },
-  { "name": "Kaggle", "url": "https://www.kaggle.com/{}", "check_type": "status_code", "error_code": 404, "category": "Data Science" },
-  { "name": "LeetCode", "url": "https://leetcode.com/{}/", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "HackerRank", "url": "https://www.hackerrank.com/{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "Codeforces", "url": "https://codeforces.com/profile/{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "Codecademy", "url": "https://www.codecademy.com/profiles/{}", "check_type": "status_code", "error_code": 404, "category": "Education" },
-  { "name": "Replit", "url": "https://replit.com/@{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "WakaTime", "url": "https://wakatime.com/@{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "Pastebin", "url": "https://pastebin.com/u/{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "PyPI", "url": "https://pypi.org/user/{}/", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "npm", "url": "https://www.npmjs.com/~{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "Packagist", "url": "https://packagist.org/users/{}/", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "Crates.io", "url": "https://crates.io/users/{}", "check_type": "status_code", "error_code": 404, "category": "Development" },
-  { "name": "Habr", "url": "https://habr.com/ru/users/{}/", "check_type": "status_code", "error_code": 404, "category": "Tech News" },
-  { "name": "ProductHunt", "url": "https://www.producthunt.com/@{}", "check_type": "status_code", "error_code": 404, "category": "Tech News" },
-  { "name": "Hashnode", "url": "https://hashnode.com/@{}", "check_type": "status_code", "error_code": 404, "category": "Blogging" },
-
-  { "name": "Telegram", "url": "https://t.me/{}", "check_type": "message", "error_msg": "tgme_page_action", "category": "Messaging" },
-  { "name": "Twitter / X", "url": "https://x.com/{}", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "Reddit", "url": "https://www.reddit.com/user/{}/about.json", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "Bluesky", "url": "https://bsky.app/profile/{}.bsky.social", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "Threads", "url": "https://www.threads.net/@{}", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "Instagram", "url": "https://www.instagram.com/{}/", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "TikTok", "url": "https://www.tiktok.com/@{}", "check_type": "status_code", "error_code": 404, "category": "Video & Media" },
-  { "name": "Pinterest", "url": "https://www.pinterest.com/{}/", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "Tumblr", "url": "https://{}.tumblr.com", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "Mastodon Social", "url": "https://mastodon.social/@{}", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "VK (Vkontakte)", "url": "https://vk.com/{}", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "OK.ru", "url": "https://ok.ru/{}", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "Keybase", "url": "https://keybase.io/{}", "check_type": "status_code", "error_code": 404, "category": "Security" },
-  { "name": "Disqus", "url": "https://disqus.com/by/{}/", "check_type": "status_code", "error_code": 404, "category": "Social Media" },
-  { "name": "Linktree", "url": "https://linktr.ee/{}", "check_type": "status_code", "error_code": 404, "category": "Bio Link" },
-  { "name": "Carrd", "url": "https://{}.carrd.co", "check_type": "status_code", "error_code": 404, "category": "Bio Link" },
-  { "name": "About.me", "url": "https://about.me/{}", "check_type": "status_code", "error_code": 404, "category": "Portfolio" },
-  { "name": "Bio.link", "url": "https://bio.link/{}", "check_type": "status_code", "error_code": 404, "category": "Bio Link" },
-  { "name": "Bento.me", "url": "https://bento.me/{}", "check_type": "status_code", "error_code": 404, "category": "Bio Link" },
-
-  { "name": "YouTube", "url": "https://www.youtube.com/@{}", "check_type": "status_code", "error_code": 404, "category": "Video & Media" },
-  { "name": "Twitch", "url": "https://www.twitch.tv/{}", "check_type": "status_code", "error_code": 404, "category": "Video & Streaming" },
-  { "name": "Kick", "url": "https://kick.com/{}", "check_type": "status_code", "error_code": 404, "category": "Video & Streaming" },
-  { "name": "Vimeo", "url": "https://vimeo.com/{}", "check_type": "status_code", "error_code": 404, "category": "Video & Media" },
-  { "name": "Dailymotion", "url": "https://www.dailymotion.com/{}", "check_type": "status_code", "error_code": 404, "category": "Video & Media" },
-  { "name": "Rumble", "url": "https://rumble.com/c/{}", "check_type": "status_code", "error_code": 404, "category": "Video & Media" },
-  { "name": "Odysee", "url": "https://odysee.com/@{}", "check_type": "status_code", "error_code": 404, "category": "Video & Media" },
-
-  { "name": "Spotify", "url": "https://open.spotify.com/user/{}", "check_type": "status_code", "error_code": 404, "category": "Music & Audio" },
-  { "name": "SoundCloud", "url": "https://soundcloud.com/{}", "check_type": "status_code", "error_code": 404, "category": "Music & Audio" },
-  { "name": "Bandcamp", "url": "https://{}.bandcamp.com", "check_type": "status_code", "error_code": 404, "category": "Music & Audio" },
-  { "name": "Last.fm", "url": "https://www.last.fm/user/{}", "check_type": "status_code", "error_code": 404, "category": "Music & Audio" },
-  { "name": "Mixcloud", "url": "https://www.mixcloud.com/{}/", "check_type": "status_code", "error_code": 404, "category": "Music & Audio" },
-  { "name": "Audiomack", "url": "https://audiomack.com/{}", "check_type": "status_code", "error_code": 404, "category": "Music & Audio" },
-  { "name": "Genius", "url": "https://genius.com/{}", "check_type": "status_code", "error_code": 404, "category": "Music & Audio" },
-  { "name": "Discogs", "url": "https://www.discogs.com/user/{}", "check_type": "status_code", "error_code": 404, "category": "Music & Audio" },
-
-  { "name": "Steam", "url": "https://steamcommunity.com/id/{}", "check_type": "message", "error_msg": "The specified profile could not be found", "category": "Gaming" },
-  { "name": "Chess.com", "url": "https://api.chess.com/pub/player/{}", "check_type": "status_code", "error_code": 404, "category": "Gaming" },
-  { "name": "Lichess", "url": "https://lichess.org/api/user/{}", "check_type": "status_code", "error_code": 404, "category": "Gaming" },
-  { "name": "Roblox", "url": "https://www.roblox.com/user.aspx?username={}", "check_type": "status_code", "error_code": 404, "category": "Gaming" },
-  { "name": "NameMC (Minecraft)", "url": "https://namemc.com/profile/{}", "check_type": "status_code", "error_code": 404, "category": "Gaming" },
-  { "name": "osu!", "url": "https://osu.ppy.sh/users/{}", "check_type": "status_code", "error_code": 404, "category": "Gaming" },
-  { "name": "Speedrun.com", "url": "https://www.speedrun.com/user/{}", "check_type": "status_code", "error_code": 404, "category": "Gaming" },
-  { "name": "Itch.io", "url": "https://{}.itch.io", "check_type": "status_code", "error_code": 404, "category": "Gaming" },
-  { "name": "GameJolt", "url": "https://gamejolt.com/@{}", "check_type": "status_code", "error_code": 404, "category": "Gaming" },
-
-  { "name": "Medium", "url": "https://medium.com/@{}", "check_type": "status_code", "error_code": 404, "category": "Blogging" },
-  { "name": "Substack", "url": "https://{}.substack.com", "check_type": "status_code", "error_code": 404, "category": "Blogging" },
-  { "name": "Patreon", "url": "https://www.patreon.com/{}", "check_type": "status_code", "error_code": 404, "category": "Crowdfunding" },
-  { "name": "BuyMeACoffee", "url": "https://www.buymeacoffee.com/{}", "check_type": "status_code", "error_code": 404, "category": "Crowdfunding" },
-  { "name": "Ko-fi", "url": "https://ko-fi.com/{}", "check_type": "status_code", "error_code": 404, "category": "Crowdfunding" },
-
-  { "name": "Dribbble", "url": "https://dribbble.com/{}", "check_type": "status_code", "error_code": 404, "category": "Design & Art" },
-  { "name": "Behance", "url": "https://www.behance.net/{}", "check_type": "status_code", "error_code": 404, "category": "Design & Art" },
-  { "name": "ArtStation", "url": "https://www.artstation.com/{}", "check_type": "status_code", "error_code": 404, "category": "Design & Art" },
-  { "name": "DeviantArt", "url": "https://www.deviantart.com/{}", "check_type": "status_code", "error_code": 404, "category": "Design & Art" },
-  { "name": "Flickr", "url": "https://www.flickr.com/people/{}", "check_type": "status_code", "error_code": 404, "category": "Photography" },
-  { "name": "500px", "url": "https://500px.com/p/{}", "check_type": "status_code", "error_code": 404, "category": "Photography" },
-  { "name": "Giphy", "url": "https://giphy.com/channel/{}", "check_type": "status_code", "error_code": 404, "category": "Media" },
-
-  { "name": "Duolingo", "url": "https://www.duolingo.com/2017-06-30/users?username={}", "check_type": "message", "error_msg": "\"users\":[]", "category": "Education" },
-  { "name": "Letterboxd", "url": "https://letterboxd.com/{}/", "check_type": "status_code", "error_code": 404, "category": "Entertainment" },
-  { "name": "MyAnimeList", "url": "https://myanimelist.net/profile/{}", "check_type": "status_code", "error_code": 404, "category": "Entertainment" },
-  { "name": "Trakt", "url": "https://trakt.tv/users/{}", "check_type": "status_code", "error_code": 404, "category": "Entertainment" },
-  { "name": "Goodreads", "url": "https://www.goodreads.com/{}", "check_type": "status_code", "error_code": 404, "category": "Books" },
-  { "name": "Strava", "url": "https://www.strava.com/athletes/{}", "check_type": "status_code", "error_code": 404, "category": "Fitness" },
-  { "name": "Gravatar Profile", "url": "https://gravatar.com/{}", "check_type": "status_code", "error_code": 404, "category": "Identity" },
-  { "name": "Instructables", "url": "https://www.instructables.com/member/{}/", "check_type": "status_code", "error_code": 404, "category": "DIY & Tech" },
-  { "name": "Thingiverse", "url": "https://www.thingiverse.com/{}/designs", "check_type": "status_code", "error_code": 404, "category": "3D & Hardware" },
-  { "name": "Printables", "url": "https://www.printables.com/@{}", "check_type": "status_code", "error_code": 404, "category": "3D & Hardware" },
-  { "name": "Hackster.io", "url": "https://www.hackster.io/{}", "check_type": "status_code", "error_code": 404, "category": "DIY & Tech" }
+  {
+    "name": "GitHub",
+    "url": "https://api.github.com/users/{}",
+    "profile_url": "https://github.com/{}",
+    "check_type": "status_code",
+    "category": "Development",
+    "regex": "^[a-zA-Z0-9-]{1,39}$"
+  },
+  {
+    "name": "GitLab",
+    "url": "https://gitlab.com/{}",
+    "profile_url": "https://gitlab.com/{}",
+    "check_type": "response_url",
+    "error_url": "https://gitlab.com/users/sign_in",
+    "category": "Development",
+    "regex": "^[a-zA-Z0-9_.-]+$"
+  },
+  {
+    "name": "Bitbucket",
+    "url": "https://api.bitbucket.org/2.0/users/{}",
+    "profile_url": "https://bitbucket.org/{}/",
+    "check_type": "status_code",
+    "category": "Development"
+  },
+  {
+    "name": "DockerHub",
+    "url": "https://hub.docker.com/v2/users/{}/",
+    "profile_url": "https://hub.docker.com/u/{}",
+    "check_type": "status_code",
+    "category": "Development"
+  },
+  {
+    "name": "Dev.to",
+    "url": "https://dev.to/api/users/by_username?url={}",
+    "profile_url": "https://dev.to/{}",
+    "check_type": "status_code",
+    "category": "Development"
+  },
+  {
+    "name": "HackerNews",
+    "url": "https://hacker-news.firebaseio.com/v0/user/{}.json",
+    "profile_url": "https://news.ycombinator.com/user?id={}",
+    "check_type": "api_not_null",
+    "category": "Tech News"
+  },
+  {
+    "name": "Chess.com",
+    "url": "https://api.chess.com/pub/player/{}",
+    "profile_url": "https://www.chess.com/member/{}",
+    "check_type": "status_code",
+    "category": "Gaming"
+  },
+  {
+    "name": "Lichess",
+    "url": "https://lichess.org/api/user/{}",
+    "profile_url": "https://lichess.org/@/{}",
+    "check_type": "status_code",
+    "category": "Gaming"
+  },
+  {
+    "name": "Codeforces",
+    "url": "https://codeforces.com/api/user.info?handles={}",
+    "profile_url": "https://codeforces.com/profile/{}",
+    "check_type": "api_codeforces",
+    "category": "Development"
+  },
+  {
+    "name": "Bluesky",
+    "url": "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor={}.bsky.social",
+    "profile_url": "https://bsky.app/profile/{}.bsky.social",
+    "check_type": "status_code",
+    "category": "Social Media"
+  },
+  {
+    "name": "Mastodon Social",
+    "url": "https://mastodon.social/api/v1/accounts/lookup?acct={}",
+    "profile_url": "https://mastodon.social/@{}",
+    "check_type": "status_code",
+    "category": "Social Media"
+  },
+  {
+    "name": "Keybase",
+    "url": "https://keybase.io/_/api/1.0/user/lookup.json?usernames={}",
+    "profile_url": "https://keybase.io/{}",
+    "check_type": "api_keybase",
+    "category": "Security"
+  },
+  {
+    "name": "Telegram",
+    "url": "https://t.me/{}",
+    "profile_url": "https://t.me/{}",
+    "check_type": "message_present",
+    "success_msg": "tgme_page_extra",
+    "category": "Messaging"
+  },
+  {
+    "name": "Steam",
+    "url": "https://steamcommunity.com/id/{}",
+    "profile_url": "https://steamcommunity.com/id/{}",
+    "check_type": "steam_check",
+    "category": "Gaming"
+  },
+  {
+    "name": "Duolingo",
+    "url": "https://www.duolingo.com/2017-06-30/users?username={}",
+    "profile_url": "https://www.duolingo.com/profile/{}",
+    "check_type": "api_duolingo",
+    "category": "Education"
+  },
+  {
+    "name": "Pinterest",
+    "url": "https://www.pinterest.com/oembed.json?url=https://www.pinterest.com/{}/",
+    "profile_url": "https://www.pinterest.com/{}/",
+    "check_type": "status_code",
+    "category": "Social Media"
+  },
+  {
+    "name": "Crates.io",
+    "url": "https://crates.io/api/v1/users/{}",
+    "profile_url": "https://crates.io/users/{}",
+    "check_type": "status_code",
+    "category": "Development"
+  },
+  {
+    "name": "npm (Packages)",
+    "url": "https://registry.npmjs.org/-/v1/search?text=maintainer:{}&size=1",
+    "profile_url": "https://www.npmjs.com/~{}",
+    "check_type": "api_npm",
+    "category": "Development"
+  },
+  {
+    "name": "YouTube",
+    "url": "https://www.youtube.com/@{}",
+    "profile_url": "https://www.youtube.com/@{}",
+    "check_type": "youtube_check",
+    "category": "Video & Media"
+  },
+  {
+    "name": "Linktree",
+    "url": "https://linktr.ee/{}",
+    "profile_url": "https://linktr.ee/{}",
+    "check_type": "linktree_check",
+    "category": "Bio Link"
+  },
+  {
+    "name": "Pastebin",
+    "url": "https://pastebin.com/u/{}",
+    "profile_url": "https://pastebin.com/u/{}",
+    "check_type": "status_code",
+    "category": "Development"
+  },
+  {
+    "name": "SoundCloud",
+    "url": "https://soundcloud.com/{}",
+    "profile_url": "https://soundcloud.com/{}",
+    "check_type": "status_code",
+    "category": "Music & Audio"
+  },
+  {
+    "name": "WakaTime",
+    "url": "https://wakatime.com/api/v1/users/@{}",
+    "profile_url": "https://wakatime.com/@{}",
+    "check_type": "status_code",
+    "category": "Development"
+  },
+  {
+    "name": "Flickr",
+    "url": "https://www.flickr.com/people/{}/",
+    "profile_url": "https://www.flickr.com/people/{}/",
+    "check_type": "status_code",
+    "category": "Photography"
+  },
+  {
+    "name": "Dribbble",
+    "url": "https://dribbble.com/{}",
+    "profile_url": "https://dribbble.com/{}",
+    "check_type": "status_code",
+    "category": "Design & Art"
+  },
+  {
+    "name": "Goodreads",
+    "url": "https://www.goodreads.com/{}",
+    "profile_url": "https://www.goodreads.com/{}",
+    "check_type": "status_code",
+    "category": "Books"
+  },
+  {
+    "name": "Habr",
+    "url": "https://habr.com/ru/users/{}/",
+    "profile_url": "https://habr.com/ru/users/{}/",
+    "check_type": "status_code",
+    "category": "Tech News"
+  },
+  {
+    "name": "Vimeo",
+    "url": "https://vimeo.com/{}",
+    "profile_url": "https://vimeo.com/{}",
+    "check_type": "status_code",
+    "category": "Video & Media"
+  },
+  {
+    "name": "Gravatar Profile",
+    "url": "https://en.gravatar.com/{}.json",
+    "profile_url": "https://gravatar.com/{}",
+    "check_type": "status_code",
+    "category": "Identity"
+  }
 ]
