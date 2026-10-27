@@ -146,25 +146,7 @@ python run.py
 ```
 Откройте в браузере: **[http://localhost:8000](http://localhost:8000)**.
 
----
-
-### 📤 Публикация на GitHub
-
-Репозиторий уже настроен, содержит лицензию MIT, файл `.gitignore` и первый коммит в ветке `main`:
-
-```bash
-cd /home/kraim0v/OmniTrace
-
-# 1. Создайте пустой репозиторий с именем "OmniTrace" на своем GitHub
-# 2. Привяжите удаленный репозиторий:
-git remote add origin https://github.com/<ваш-логин>/OmniTrace.git
-
-# 3. Отправьте код:
-git branch -M main
-git push -u origin main
-```
-
----
+___
 
 ### 🔒 Лицензия
 Распространяется под свободной лицензией [MIT](LICENSE).
