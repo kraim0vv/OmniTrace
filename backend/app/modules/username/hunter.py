@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import re
 import time
+from urllib.parse import quote
 from typing import AsyncGenerator, Dict, List
 import httpx
 from app.core.models import Finding, FindingStatus, TargetType
@@ -44,8 +45,10 @@ class UsernameHunterModule(BaseModule):
         semaphore: asyncio.Semaphore
     ) -> Finding:
         site_name = site["name"]
-        url_probe = site["url"].replace("{}", target)
-        profile_url = site.get("profile_url", site["url"]).replace("{}", target)
+        # Encode so odd input cannot alter the probed path/query on third-party sites
+        safe_target = quote(target, safe="._-")
+        url_probe = site["url"].replace("{}", safe_target)
+        profile_url = site.get("profile_url", site["url"]).replace("{}", safe_target)
         category = site.get("category", "Social Media")
         check_type = site.get("check_type", "status_code")
         error_url = site.get("error_url")

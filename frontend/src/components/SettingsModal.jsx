@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { X, Settings, Shield, Key, Save, CheckCircle2 } from 'lucide-react';
 import { getSettings, updateSettings } from '../services/api';
+import { useI18n } from '../i18n';
 
 export default function SettingsModal({ isOpen, onClose }) {
+  const { t } = useI18n();
   const [proxyUrl, setProxyUrl] = useState('');
   const [timeout, setTimeoutVal] = useState('8.0');
   const [hibpKey, setHibpKey] = useState('');
@@ -40,6 +42,7 @@ export default function SettingsModal({ isOpen, onClose }) {
       }, 1200);
     } catch (err) {
       console.error(err);
+      window.alert(t('settings.saveFailed', { message: err.message }));
     } finally {
       setLoading(false);
     }
@@ -54,11 +57,13 @@ export default function SettingsModal({ isOpen, onClose }) {
           <div className="flex items-center gap-2.5">
             <Settings className="w-4 h-4 text-white" />
             <h3 className="font-semibold text-sm text-white">
-              OPSEC & Module Configuration
+              {t('settings.title')}
             </h3>
           </div>
           <button
             onClick={onClose}
+            title={t('settings.close')}
+            aria-label={t('settings.close')}
             className="p-1 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
           >
             <X className="w-4 h-4" />
@@ -71,29 +76,29 @@ export default function SettingsModal({ isOpen, onClose }) {
           <div>
             <div className="flex items-center gap-2 mb-1.5 text-xs font-semibold uppercase tracking-wider text-white font-mono">
               <Shield className="w-3.5 h-3.5" />
-              <span>Proxy & Tor Anonymity</span>
+              <span>{t('settings.proxyHeading')}</span>
             </div>
             <p className="text-[11px] text-zinc-400 mb-3 font-mono">
-              Route queries through an upstream HTTP, SOCKS5, or Tor proxy to shield your investigator IP address.
+              {t('settings.proxyText')}
             </p>
 
             <div className="flex flex-col gap-3">
               <div>
                 <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
-                  Upstream Proxy URL (Optional)
+                  {t('settings.proxyLabel')}
                 </label>
                 <input
                   type="text"
                   value={proxyUrl}
                   onChange={(e) => setProxyUrl(e.target.value)}
-                  placeholder="e.g. socks5://127.0.0.1:9050 or http://1.2.3.4:8080"
+                  placeholder={t('settings.proxyPlaceholder')}
                   className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-white/40"
                 />
               </div>
 
               <div>
                 <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
-                  Timeout (Seconds)
+                  {t('settings.timeout')}
                 </label>
                 <input
                   type="number"
@@ -112,48 +117,48 @@ export default function SettingsModal({ isOpen, onClose }) {
           <div className="pt-4 border-t border-white/10">
             <div className="flex items-center gap-2 mb-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-200 font-mono">
               <Key className="w-3.5 h-3.5" />
-              <span>Optional API Keys</span>
+              <span>{t('settings.keysHeading')}</span>
             </div>
             <p className="text-[11px] text-zinc-400 mb-3 font-mono">
-              OmniTrace functions 100% without keys. Adding personal keys enables optional deep dataset enrichment.
+              {t('settings.keysText')}
             </p>
 
             <div className="flex flex-col gap-3">
               <div>
                 <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
-                  HaveIBeenPwned API Key
+                  {t('settings.hibp')}
                 </label>
                 <input
                   type="password"
                   value={hibpKey}
                   onChange={(e) => setHibpKey(e.target.value)}
-                  placeholder="Paste HIBP key..."
+                  placeholder={t('settings.hibpPlaceholder')}
                   className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-white/40"
                 />
               </div>
 
               <div>
                 <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
-                  Shodan API Key
+                  {t('settings.shodan')}
                 </label>
                 <input
                   type="password"
                   value={shodanKey}
                   onChange={(e) => setShodanKey(e.target.value)}
-                  placeholder="Paste Shodan key..."
+                  placeholder={t('settings.shodanPlaceholder')}
                   className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-white/40"
                 />
               </div>
 
               <div>
                 <label className="text-[11px] text-zinc-300 block mb-1 font-mono">
-                  VirusTotal API Key
+                  {t('settings.vt')}
                 </label>
                 <input
                   type="password"
                   value={vtKey}
                   onChange={(e) => setVtKey(e.target.value)}
-                  placeholder="Paste VirusTotal key..."
+                  placeholder={t('settings.vtPlaceholder')}
                   className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-white/40"
                 />
               </div>
@@ -163,7 +168,7 @@ export default function SettingsModal({ isOpen, onClose }) {
           {/* Footer Save */}
           <div className="pt-4 border-t border-white/10 flex items-center justify-between">
             <span className="text-[11px] text-zinc-500 font-mono">
-              Stored locally on host
+              {t('settings.storedLocally')}
             </span>
             <button
               type="submit"
@@ -173,12 +178,12 @@ export default function SettingsModal({ isOpen, onClose }) {
               {savedSuccess ? (
                 <>
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Saved</span>
+                  <span>{t('settings.saved')}</span>
                 </>
               ) : (
                 <>
                   <Save className="w-3.5 h-3.5" />
-                  <span>Save Configuration</span>
+                  <span>{t('settings.save')}</span>
                 </>
               )}
             </button>

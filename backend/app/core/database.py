@@ -1,10 +1,9 @@
 import asyncio
 import json
-import sqlite3
 import aiosqlite
 from typing import Any, Dict, List, Optional
 from app.config import DB_PATH
-from app.core.models import Case, Finding, FindingStatus, ScanStatus, ScanSummary, TargetType
+from app.core.models import Case, Finding, FindingStatus, ScanSummary, TargetType
 
 db_lock = asyncio.Lock()
 

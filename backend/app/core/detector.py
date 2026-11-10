@@ -1,6 +1,5 @@
 import ipaddress
 import re
-from typing import Optional
 from app.core.models import DetectionResult, TargetType
 
 # Regular expressions for entity classification

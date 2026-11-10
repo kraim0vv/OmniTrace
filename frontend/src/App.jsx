@@ -7,6 +7,8 @@ import GraphView from './components/GraphView';
 import CasesModal from './components/CasesModal';
 import SettingsModal from './components/SettingsModal';
 import ExportModal from './components/ExportModal';
+import { X, AlertTriangle } from 'lucide-react';
+import { useI18n } from './i18n';
 import { 
   getCases, 
   createCase, 
@@ -17,6 +19,8 @@ import {
 } from './services/api';
 
 export default function App() {
+  const { t } = useI18n();
+  const [notice, setNotice] = useState(null);
   const [activeTab, setActiveTab] = useState('feed');
   const [currentTarget, setCurrentTarget] = useState('');
   const [currentTargetType, setCurrentTargetType] = useState('unknown');
@@ -49,6 +53,7 @@ export default function App() {
         eventSourceRef.current.close();
       }
 
+      setNotice(null);
       setFindings([]);
       setScanSummary(null);
       setIsScanning(true);
@@ -112,16 +117,19 @@ export default function App() {
       });
 
       es.addEventListener('scan_failed', () => {
+        setNotice(t('error.scanFailed'));
         setIsScanning(false);
         es.close();
       });
 
       es.onerror = () => {
+        setNotice(t('error.connectionLost'));
         setIsScanning(false);
         es.close();
       };
     } catch (err) {
       console.error('Scan launch failed:', err);
+      setNotice(t('error.startFailed', { message: err.message }));
       setIsScanning(false);
     }
   };
@@ -168,14 +176,14 @@ export default function App() {
           <div className="text-center max-w-2xl mx-auto my-8 sm:my-14 animate-fadeIn">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-white/10 text-zinc-300 text-xs font-mono mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
-              <span>Minimalist OSINT Reconnaissance Framework</span>
+              <span>{t('hero.badge')}</span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-              Universal Entity <br />
-              <span className="text-zinc-400">Intelligence Dashboard</span>
+              {t('hero.title1')} <br />
+              <span className="text-zinc-400">{t('hero.title2')}</span>
             </h1>
             <p className="mt-3 text-xs sm:text-sm text-zinc-400 max-w-lg mx-auto font-mono">
-              Fast, privacy-first reconnaissance across 130+ sources. Zero external logs, instant link analysis, and full OPSEC control.
+              {t('hero.subtitle')}
             </p>
           </div>
         )}
@@ -186,6 +194,25 @@ export default function App() {
           isScanning={isScanning}
           availableModules={availableModules}
         />
+
+        {notice && (
+          <div
+            role="alert"
+            className="w-full max-w-4xl mx-auto mb-4 flex items-start gap-2.5 px-3.5 py-2.5 rounded-lg bg-zinc-900 border border-rose-400/30 text-xs text-zinc-200 font-mono animate-fadeIn"
+          >
+            <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-px" />
+            <span className="flex-1 break-words">{notice}</span>
+            <button
+              type="button"
+              onClick={() => setNotice(null)}
+              title={t('banner.dismiss')}
+              aria-label={t('banner.dismiss')}
+              className="text-zinc-400 hover:text-white"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
 
         <StatsOverview summary={scanSummary} isScanning={isScanning} />
 
@@ -204,10 +231,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
-            <span>OmniTrace Core • 100% Client/Self-Hosted Architecture</span>
+            <span>{t('footer.left')}</span>
           </div>
           <div>
-            Zero Telemetry • Free & Open Source under MIT License
+            {t('footer.right')}
           </div>
         </div>
       </footer>

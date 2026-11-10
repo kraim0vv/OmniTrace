@@ -21,6 +21,8 @@ class Settings(BaseModel):
     proxy_url: str | None = os.getenv("OMNITRACE_PROXY", None)
     default_timeout: float = float(os.getenv("OMNITRACE_TIMEOUT", "8.0"))
     max_concurrency: int = int(os.getenv("OMNITRACE_MAX_CONCURRENCY", "20"))
+    # Protects a public server from being used as an unbounded scanning relay
+    max_active_scans: int = int(os.getenv("OMNITRACE_MAX_ACTIVE_SCANS", "5"))
     user_agent: str = (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
