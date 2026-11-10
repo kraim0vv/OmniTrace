@@ -1,3 +1,4 @@
+import re
 from fastapi import APIRouter, HTTPException, Response
 from sse_starlette.sse import EventSourceResponse
 from app.core.database import get_recent_scans, get_scan_findings
@@ -65,27 +66,29 @@ async def export_scan_results(scan_id: str, format: str):
             error_count=err_cnt
         )
 
+    # Headers must be latin-1 and must not contain quotes/newlines
+    safe_target = re.sub(r"[^A-Za-z0-9._@+-]", "_", summary.target)[:64] or "target"
     fmt = format.lower()
     if fmt == "json":
         content = generate_json_report(summary, findings)
         return Response(
             content=content,
             media_type="application/json",
-            headers={"Content-Disposition": f"attachment; filename=omnitrace_{summary.target}_{scan_id[:6]}.json"}
+            headers={"Content-Disposition": f"attachment; filename=omnitrace_{safe_target}_{scan_id[:6]}.json"}
         )
     elif fmt == "csv":
         content = generate_csv_report(findings)
         return Response(
             content=content,
             media_type="text/csv",
-            headers={"Content-Disposition": f"attachment; filename=omnitrace_{summary.target}_{scan_id[:6]}.csv"}
+            headers={"Content-Disposition": f"attachment; filename=omnitrace_{safe_target}_{scan_id[:6]}.csv"}
         )
     elif fmt in ("html", "pdf"):
         content = generate_html_report(summary, findings)
         return Response(
             content=content,
             media_type="text/html",
-            headers={"Content-Disposition": f"inline; filename=omnitrace_{summary.target}_{scan_id[:6]}.html"}
+            headers={"Content-Disposition": f"inline; filename=omnitrace_{safe_target}_{scan_id[:6]}.html"}
         )
     else:
         raise HTTPException(status_code=400, detail="Invalid format. Supported: json, csv, html")

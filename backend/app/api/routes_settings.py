@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from typing import Optional
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
 from app.config import settings
 
 router = APIRouter(prefix="/api/settings", tags=["Settings & OPSEC"])
@@ -16,20 +18,26 @@ async def get_settings():
         "hunter_api_key_set": bool(settings.hunter_api_key),
     }
 
+class SettingsUpdate(BaseModel):
+    proxy_url: Optional[str] = None
+    default_timeout: Optional[float] = Field(default=None, gt=0, le=120)
+    hibp_api_key: Optional[str] = None
+    shodan_api_key: Optional[str] = None
+    virustotal_api_key: Optional[str] = None
+
+
 @router.post("")
-async def update_settings(payload: dict):
-    if "proxy_url" in payload:
-        settings.proxy_url = payload["proxy_url"].strip() or None
-    if "default_timeout" in payload:
-        try:
-            settings.default_timeout = float(payload["default_timeout"])
-        except ValueError:
-            pass
-    if "hibp_api_key" in payload and payload["hibp_api_key"]:
-        settings.hibp_api_key = payload["hibp_api_key"].strip()
-    if "shodan_api_key" in payload and payload["shodan_api_key"]:
-        settings.shodan_api_key = payload["shodan_api_key"].strip()
-    if "virustotal_api_key" in payload and payload["virustotal_api_key"]:
-        settings.virustotal_api_key = payload["virustotal_api_key"].strip()
+async def update_settings(payload: SettingsUpdate):
+    if payload.proxy_url is not None:
+        proxy = payload.proxy_url.strip()
+        if proxy and not proxy.startswith(("http://", "https://", "socks5://", "socks5h://")):
+            raise HTTPException(status_code=400, detail="Proxy must start with http://, https://, socks5:// or socks5h://")
+        settings.proxy_url = proxy or None
+    if payload.default_timeout is not None:
+        settings.default_timeout = payload.default_timeout
+    for key in ("hibp_api_key", "shodan_api_key", "virustotal_api_key"):
+        value = getattr(payload, key)
+        if value and value.strip():
+            setattr(settings, key, value.strip())
 
     return {"status": "saved", "message": "Settings updated successfully."}

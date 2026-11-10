@@ -15,6 +15,9 @@ services:
       - DEBUG=false
       - OMNITRACE_TIMEOUT=8.0
       - OMNITRACE_MAX_CONCURRENCY=20
+      # Protect the site with a password when exposing it to the internet
+      - OMNITRACE_USER=${OMNITRACE_USER:-admin}
+      - OMNITRACE_PASSWORD=${OMNITRACE_PASSWORD:-}
       # Optional: upstream proxy (e.g., Tor SOCKS5 or corporate HTTP proxy)
       # - OMNITRACE_PROXY=socks5://tor:9050
       # Optional API Keys
