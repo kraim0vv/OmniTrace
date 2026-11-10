@@ -1,7 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { ZoomIn, ZoomOut, RotateCcw, ExternalLink } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 export default function GraphView({ target, targetType, findings = [] }) {
+  const { t } = useI18n();
   const canvasRef = useRef(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [zoom, setZoom] = useState(1);
@@ -76,7 +78,7 @@ export default function GraphView({ target, targetType, findings = [] }) {
       ctx.font = '11px JetBrains Mono, monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      const label = f.source || 'Item';
+      const label = f.source || t('graph.item');
       ctx.fillText(label, nx, ny + 24);
     });
 
@@ -99,11 +101,11 @@ export default function GraphView({ target, targetType, findings = [] }) {
     ctx.font = 'bold 11px JetBrains Mono, monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const displayTarget = target ? (target.length > 9 ? target.slice(0, 8) + '…' : target) : 'TARGET';
+    const displayTarget = target ? (target.length > 9 ? target.slice(0, 8) + '…' : target) : t('graph.target');
     ctx.fillText(displayTarget, centerX, centerY);
 
     ctx.restore();
-  }, [relevantFindings, target, zoom, offset]);
+  }, [relevantFindings, target, zoom, offset, t]);
 
   const handleCanvasClick = (e) => {
     const canvas = canvasRef.current;
@@ -153,10 +155,10 @@ export default function GraphView({ target, targetType, findings = [] }) {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-xs uppercase tracking-wider text-white font-mono">
-            Relationship Graph
+            {t('graph.title')}
           </span>
           <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono border border-white/10">
-            {relevantFindings.length} Nodes
+            {t('graph.nodes', { count: relevantFindings.length })}
           </span>
         </div>
 
@@ -164,21 +166,21 @@ export default function GraphView({ target, targetType, findings = [] }) {
           <button
             onClick={() => setZoom((z) => Math.min(z + 0.2, 2.5))}
             className="p-1.5 rounded bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
-            title="Zoom In"
+            title={t('graph.zoomIn')}
           >
             <ZoomIn className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => setZoom((z) => Math.max(z - 0.2, 0.4))}
             className="p-1.5 rounded bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
-            title="Zoom Out"
+            title={t('graph.zoomOut')}
           >
             <ZoomOut className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => { setZoom(1); setOffset({ x: 0, y: 0 }); }}
             className="p-1.5 rounded bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
-            title="Reset"
+            title={t('graph.reset')}
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
@@ -211,10 +213,10 @@ export default function GraphView({ target, targetType, findings = [] }) {
               </button>
             </div>
             <div className="text-xs text-zinc-200 font-medium mb-1">
-              {selectedNode.title || 'Connected Entity'}
+              {selectedNode.title || t('graph.connected')}
             </div>
             <p className="text-[11px] text-zinc-400 mb-2 font-mono">
-              {selectedNode.description || 'No description available.'}
+              {selectedNode.description || t('graph.noDescription')}
             </p>
             {selectedNode.url && (
               <a
@@ -223,7 +225,7 @@ export default function GraphView({ target, targetType, findings = [] }) {
                 rel="noreferrer"
                 className="inline-flex items-center gap-1 text-xs text-white hover:underline font-mono"
               >
-                <span>Visit Source</span>
+                <span>{t('graph.visit')}</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
             )}
@@ -232,7 +234,7 @@ export default function GraphView({ target, targetType, findings = [] }) {
       </div>
 
       <div className="mt-2 text-center text-[11px] text-zinc-500 font-mono">
-        Drag to navigate • Click nodes to view details
+        {t('graph.hint')}
       </div>
     </div>
   );

@@ -116,6 +116,17 @@ OMNITRACE_PASSWORD='change-me' docker compose up -d --build
 
 - **Always set `OMNITRACE_PASSWORD`** on an internet-facing server: the whole site (UI + API) is then protected with HTTP Basic Auth (user `OMNITRACE_USER`, default `admin`). Without it anyone could run scans from your server and read your case vault.
 - Put it behind HTTPS (e.g. [Caddy](https://caddyserver.com): `caddy reverse-proxy --from your-domain.com --to localhost:8000`) so the password is never sent in plain text.
+- `OMNITRACE_MAX_ACTIVE_SCANS` (default `5`) caps simultaneous scans; extra requests receive HTTP 429.
+
+---
+
+#### 🧪 Tests
+```bash
+cd backend
+pip install -r requirements-dev.txt
+python -m pytest -q        # unit + API tests, no network access required
+pyflakes app tests
+```
 
 ---
 

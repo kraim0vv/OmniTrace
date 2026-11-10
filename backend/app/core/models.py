@@ -50,7 +50,7 @@ class Finding(BaseModel):
     timestamp: float = Field(default_factory=time.time)
 
 class ScanRequest(BaseModel):
-    target: str
+    target: str = Field(max_length=512)
     target_type: Optional[TargetType] = None
     modules: Optional[List[str]] = None
     case_id: Optional[str] = None

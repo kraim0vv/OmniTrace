@@ -3,8 +3,8 @@ from fastapi import APIRouter, HTTPException, Response
 from sse_starlette.sse import EventSourceResponse
 from app.core.database import get_recent_scans, get_scan_findings
 from app.core.detector import detect_entity
-from app.core.engine import engine
-from app.core.models import DetectionResult, Finding, ScanRequest, ScanStatus, ScanSummary, TargetType
+from app.core.engine import TooManyScansError, engine
+from app.core.models import DetectionResult, ScanRequest, ScanStatus, ScanSummary, TargetType
 from app.core.reporter import generate_csv_report, generate_html_report, generate_json_report
 
 router = APIRouter(prefix="/api/scan", tags=["Scanning"])
@@ -21,7 +21,10 @@ async def start_scan(req: ScanRequest):
     if not req.target or not req.target.strip():
         raise HTTPException(status_code=400, detail="Target cannot be empty.")
     
-    scan_id = await engine.start_scan(req)
+    try:
+        scan_id = await engine.start_scan(req)
+    except TooManyScansError as exc:
+        raise HTTPException(status_code=429, detail=str(exc))
     return {"scan_id": scan_id, "status": "started"}
 
 @router.get("/{scan_id}/stream")
