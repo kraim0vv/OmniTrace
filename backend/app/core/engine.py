@@ -23,6 +23,13 @@ from app.modules.network.whois_lookup import WhoisLookupModule
 from app.modules.phone.phonelookup import PhoneLookupModule
 from app.modules.username.hunter import UsernameHunterModule
 
+SCAN_STATE_RETENTION_SECONDS = 15 * 60
+
+
+class TooManyScansError(Exception):
+    pass
+
+
 class ScanEngine:
     def __init__(self):
         self.modules: Dict[str, BaseModule] = {
@@ -57,6 +64,10 @@ class ScanEngine:
         ]
 
     async def start_scan(self, req: ScanRequest) -> str:
+        if len(self.active_scans) >= settings.max_active_scans:
+            raise TooManyScansError(
+                f"Too many active scans ({settings.max_active_scans}). Wait for one to finish."
+            )
         scan_id = str(uuid.uuid4())
         
         # Auto-detect target type if not supplied
@@ -132,53 +143,45 @@ class ScanEngine:
                 }
             })
 
+            async def record(finding: Finding):
+                summary.total_checks += 1
+                if finding.status == FindingStatus.FOUND:
+                    summary.found_count += 1
+                elif finding.status == FindingStatus.NOT_FOUND:
+                    summary.not_found_count += 1
+                elif finding.status in (FindingStatus.ERROR, FindingStatus.RATE_LIMITED):
+                    summary.error_count += 1
+                summary.findings.append(finding)
+                # Awaited (not fire-and-forget) so exports right after completion see every finding
+                await save_finding(finding)
+                await queue.put({"event": "finding", "data": finding.model_dump()})
+
+            async def run_module(key: str, module: BaseModule, client: httpx.AsyncClient):
+                await queue.put({
+                    "event": "module_start",
+                    "data": {"module": key, "category": module.category}
+                })
+                try:
+                    async for finding in module.run(target, scan_id, client):
+                        await record(finding)
+                except Exception as mod_err:
+                    await record(Finding(
+                        scan_id=scan_id,
+                        target=target,
+                        target_type=target_type,
+                        category=module.category,
+                        source=module.name,
+                        status=FindingStatus.ERROR,
+                        title=f"Module '{module.name}' Exception",
+                        description=str(mod_err)
+                    ))
+
             async with httpx.AsyncClient(**client_kwargs) as client:
-                for key in module_keys:
-                    module = self.modules.get(key)
-                    if not module:
-                        continue
-
-                    await queue.put({
-                        "event": "module_start",
-                        "data": {"module": key, "category": module.category}
-                    })
-
-                    try:
-                        async for finding in module.run(target, scan_id, client):
-                            summary.total_checks += 1
-                            if finding.status == FindingStatus.FOUND:
-                                summary.found_count += 1
-                            elif finding.status == FindingStatus.NOT_FOUND:
-                                summary.not_found_count += 1
-                            elif finding.status in (FindingStatus.ERROR, FindingStatus.RATE_LIMITED):
-                                summary.error_count += 1
-
-                            summary.findings.append(finding)
-                            # Persist asynchronously
-                            asyncio.create_task(save_finding(finding))
-
-                            # Stream to UI
-                            await queue.put({
-                                "event": "finding",
-                                "data": finding.model_dump()
-                            })
-                    except Exception as mod_err:
-                        err_finding = Finding(
-                            scan_id=scan_id,
-                            target=target,
-                            target_type=target_type,
-                            category=module.category,
-                            source=module.name,
-                            status=FindingStatus.ERROR,
-                            title=f"Module '{module.name}' Exception",
-                            description=str(mod_err)
-                        )
-                        summary.error_count += 1
-                        summary.findings.append(err_finding)
-                        await queue.put({
-                            "event": "finding",
-                            "data": err_finding.model_dump()
-                        })
+                # Modules are independent, so run them concurrently
+                await asyncio.gather(*(
+                    run_module(key, self.modules[key], client)
+                    for key in module_keys if key in self.modules
+                ))
 
             summary.status = ScanStatus.COMPLETED
             summary.ended_at = time.time()
@@ -186,7 +189,7 @@ class ScanEngine:
 
             await queue.put({
                 "event": "scan_complete",
-                "data": summary.model_dump()
+                "data": summary.model_dump(exclude={"findings"})
             })
 
         except asyncio.CancelledError:
@@ -208,6 +211,15 @@ class ScanEngine:
         finally:
             if scan_id in self.active_scans:
                 del self.active_scans[scan_id]
+            # Free in-memory state later; results stay in SQLite for history/export
+            asyncio.get_running_loop().call_later(
+                SCAN_STATE_RETENTION_SECONDS, self._forget_scan, scan_id
+            )
+
+    def _forget_scan(self, scan_id: str) -> None:
+        if scan_id not in self.active_scans:
+            self.scan_queues.pop(scan_id, None)
+            self.scan_summaries.pop(scan_id, None)
 
     async def stream_scan_events(self, scan_id: str) -> AsyncGenerator[Dict, None]:
         queue = self.scan_queues.get(scan_id)

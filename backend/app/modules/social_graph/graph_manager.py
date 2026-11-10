@@ -10,12 +10,10 @@ Central orchestrator managing:
 
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
-import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import List, Optional, Set
 import networkx as nx
 from pyvis.network import Network
 
@@ -25,7 +23,6 @@ from app.modules.social_graph.models import (
     ExtractionResult,
     HeuristicMatchResult,
     NodeClassification,
-    PlatformType,
     ProfileNode,
     RelationshipEdge,
     RelationType,
