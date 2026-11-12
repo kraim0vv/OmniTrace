@@ -70,12 +70,10 @@ flowchart LR
 ### 🚀 Quickstart
 
 #### Option 1: 1-Command Local Launch (Recommended) ⚡
-The React frontend is already pre-built in `frontend/dist`. FastAPI serves both the API and the web interface on a single port:
+`start.sh` creates the Python virtualenv, builds the React UI on first run (needs Node.js 20+) and starts FastAPI, which serves both the API and the web interface on a single port:
 
 ```bash
-cd backend
-source venv/bin/activate
-python run.py
+./start.sh
 ```
 👉 Open your browser at **[http://localhost:8000](http://localhost:8000)**  
 👉 Interactive API documentation (Swagger): **[http://localhost:8000/docs](http://localhost:8000/docs)**
@@ -105,6 +103,30 @@ npm run dev
 docker compose up -d
 ```
 👉 Open **[http://localhost:8000](http://localhost:8000)**.
+
+---
+
+#### Option 4: Public Website (VPS / Cloud) 🌐
+OmniTrace is a web app, so it can be hosted on any VPS (Hetzner, DigitalOcean, etc.) or any Docker host (Render, Railway, Fly.io):
+
+```bash
+cp .env.example .env          # set OMNITRACE_PASSWORD to a strong password
+OMNITRACE_PASSWORD='change-me' docker compose up -d --build
+```
+
+- **Always set `OMNITRACE_PASSWORD`** on an internet-facing server: the whole site (UI + API) is then protected with HTTP Basic Auth (user `OMNITRACE_USER`, default `admin`). Without it anyone could run scans from your server and read your case vault.
+- Put it behind HTTPS (e.g. [Caddy](https://caddyserver.com): `caddy reverse-proxy --from your-domain.com --to localhost:8000`) so the password is never sent in plain text.
+- `OMNITRACE_MAX_ACTIVE_SCANS` (default `5`) caps simultaneous scans; extra requests receive HTTP 429.
+
+---
+
+#### 🧪 Tests
+```bash
+cd backend
+pip install -r requirements-dev.txt
+python -m pytest -q        # unit + API tests, no network access required
+pyflakes app tests
+```
 
 ---
 
@@ -140,11 +162,17 @@ OmniTrace avoids naive scrapers that falsely report HTTP 200 on SPA error pages.
 
 #### Самый простой способ (1 команда):
 ```bash
-cd backend
-source venv/bin/activate
-python run.py
+./start.sh
 ```
+Скрипт сам создаст venv, соберёт веб-интерфейс (нужен Node.js 20+) и запустит сервер.
 Откройте в браузере: **[http://localhost:8000](http://localhost:8000)**.
+
+#### Публичный сайт (VPS / облако):
+```bash
+cp .env.example .env          # укажите надёжный OMNITRACE_PASSWORD
+OMNITRACE_PASSWORD='change-me' docker compose up -d --build
+```
+Обязательно задайте `OMNITRACE_PASSWORD`, если сервер доступен из интернета — тогда весь сайт закрыт паролем (логин `admin` по умолчанию). Используйте HTTPS (например, Caddy как reverse proxy).
 
 ___
 

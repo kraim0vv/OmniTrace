@@ -1,5 +1,6 @@
 import csv
 import hashlib
+import html as html_lib
 import io
 import json
 import time
@@ -52,16 +53,22 @@ def generate_html_report(summary: ScanSummary, findings: List[Finding]) -> str:
     now_str = time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())
     found_rows = [f for f in findings if f.status.value == "found"]
 
+    e = lambda v: html_lib.escape(str(v), quote=True)
+
     rows_html = ""
     for f in found_rows:
-        url_link = f"<a href='{f.url}' target='_blank' style='color:#38bdf8;'>{f.url}</a>" if f.url else "—"
+        # Only link http(s) URLs so scraped data cannot inject javascript: links
+        if f.url and f.url.lower().startswith(("http://", "https://")):
+            url_link = f"<a href='{e(f.url)}' target='_blank' rel='noopener noreferrer' style='color:#38bdf8;'>{e(f.url)}</a>"
+        else:
+            url_link = e(f.url) if f.url else "—"
         rows_html += f"""
         <tr>
-            <td style="padding:10px; border-bottom:1px solid #1e293b;"><span style="background:#0284c7; color:#fff; padding:3px 8px; border-radius:4px; font-size:12px;">{f.source}</span></td>
-            <td style="padding:10px; border-bottom:1px solid #1e293b;">{f.category}</td>
-            <td style="padding:10px; border-bottom:1px solid #1e293b; font-weight:600;">{f.title or 'N/A'}</td>
+            <td style="padding:10px; border-bottom:1px solid #1e293b;"><span style="background:#0284c7; color:#fff; padding:3px 8px; border-radius:4px; font-size:12px;">{e(f.source)}</span></td>
+            <td style="padding:10px; border-bottom:1px solid #1e293b;">{e(f.category)}</td>
+            <td style="padding:10px; border-bottom:1px solid #1e293b; font-weight:600;">{e(f.title or 'N/A')}</td>
             <td style="padding:10px; border-bottom:1px solid #1e293b;">{url_link}</td>
-            <td style="padding:10px; border-bottom:1px solid #1e293b; color:#94a3b8; font-size:13px;">{f.description or ''}</td>
+            <td style="padding:10px; border-bottom:1px solid #1e293b; color:#94a3b8; font-size:13px;">{e(f.description or '')}</td>
         </tr>
         """
 
@@ -69,7 +76,7 @@ def generate_html_report(summary: ScanSummary, findings: List[Finding]) -> str:
 <html>
 <head>
 <meta charset="utf-8">
-<title>OmniTrace OSINT Intelligence Report - {summary.target}</title>
+<title>OmniTrace OSINT Intelligence Report - {e(summary.target)}</title>
 <style>
   body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0b1120; color: #f1f5f9; padding: 40px; margin: 0; }}
   .container {{ max-width: 1000px; margin: 0 auto; background: #0f172a; padding: 32px; border-radius: 12px; border: 1px solid #1e293b; }}
@@ -90,7 +97,7 @@ def generate_html_report(summary: ScanSummary, findings: List[Finding]) -> str:
   <div class="header">
     <div>
       <div class="title">⚡ OmniTrace Intelligence Report</div>
-      <div style="color:#94a3b8; font-size:14px; margin-top:4px;">Target: <strong style="color:#f8fafc;">{summary.target}</strong> ({summary.target_type.value.upper()})</div>
+      <div style="color:#94a3b8; font-size:14px; margin-top:4px;">Target: <strong style="color:#f8fafc;">{e(summary.target)}</strong> ({summary.target_type.value.upper()})</div>
     </div>
     <div class="badge">Scan ID: {summary.scan_id[:8]}...</div>
   </div>

@@ -1,7 +1,9 @@
 import React from 'react';
+import { useI18n } from '../i18n';
 import { Layers, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
 
 export default function StatsOverview({ summary, isScanning }) {
+  const { t } = useI18n();
   if (!summary && !isScanning) return null;
 
   const total = summary?.total_checks || 0;
@@ -25,7 +27,7 @@ export default function StatsOverview({ summary, isScanning }) {
           <div>
             <div className="text-xl font-bold font-mono text-white">{total}</div>
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-mono">
-              Total Checks
+              {t('stats.total')}
             </div>
           </div>
           <Layers className="w-4 h-4 text-zinc-500" />
@@ -36,7 +38,7 @@ export default function StatsOverview({ summary, isScanning }) {
           <div>
             <div className="text-xl font-bold font-mono text-white">{found}</div>
             <div className="text-[10px] text-zinc-300 uppercase tracking-wider font-mono">
-              Confirmed Finds
+              {t('stats.found')}
             </div>
           </div>
           <CheckCircle2 className="w-4 h-4 text-white" />
@@ -47,7 +49,7 @@ export default function StatsOverview({ summary, isScanning }) {
           <div>
             <div className="text-xl font-bold font-mono text-zinc-400">{notFound}</div>
             <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
-              Not Found
+              {t('stats.notFound')}
             </div>
           </div>
           <XCircle className="w-4 h-4 text-zinc-600" />
@@ -58,7 +60,7 @@ export default function StatsOverview({ summary, isScanning }) {
           <div>
             <div className="text-xl font-bold font-mono text-zinc-300">{errors}</div>
             <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
-              Errors / Skipped
+              {t('stats.errors')}
             </div>
           </div>
           <AlertTriangle className="w-4 h-4 text-zinc-500" />

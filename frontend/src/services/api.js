@@ -1,12 +1,28 @@
 const API_BASE = '/api';
 
+// Throw an Error carrying the backend `detail` message when a request fails.
+async function ensureOk(res, fallback) {
+  if (res.ok) return;
+  let message = fallback;
+  try {
+    const body = await res.json();
+    if (typeof body?.detail === 'string') message = body.detail;
+    else if (Array.isArray(body?.detail)) message = body.detail.map((d) => d.msg).join('; ');
+  } catch {
+    // non-JSON body
+  }
+  const err = new Error(message);
+  err.status = res.status;
+  throw err;
+}
+
 export const detectEntity = async (query) => {
   const res = await fetch(`${API_BASE}/scan/detect`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query }),
   });
-  if (!res.ok) throw new Error('Detection failed');
+  await ensureOk(res, 'Detection failed');
   return res.json();
 };
 
@@ -16,7 +32,7 @@ export const startScan = async (scanPayload) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(scanPayload),
   });
-  if (!res.ok) throw new Error('Failed to start scan');
+  await ensureOk(res, 'Failed to start scan');
   return res.json();
 };
 
@@ -24,13 +40,13 @@ export const stopScan = async (scanId) => {
   const res = await fetch(`${API_BASE}/scan/${scanId}/stop`, {
     method: 'POST',
   });
-  if (!res.ok) throw new Error('Failed to stop scan');
+  await ensureOk(res, 'Failed to stop scan');
   return res.json();
 };
 
 export const getScanResults = async (scanId) => {
   const res = await fetch(`${API_BASE}/scan/${scanId}/results`);
-  if (!res.ok) throw new Error('Failed to load results');
+  await ensureOk(res, 'Failed to load results');
   return res.json();
 };
 
@@ -58,7 +74,7 @@ export const createCase = async (caseData) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(caseData),
   });
-  if (!res.ok) throw new Error('Failed to create case');
+  await ensureOk(res, 'Failed to create case');
   return res.json();
 };
 
@@ -68,7 +84,7 @@ export const updateCase = async (caseId, caseData) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(caseData),
   });
-  if (!res.ok) throw new Error('Failed to update case');
+  await ensureOk(res, 'Failed to update case');
   return res.json();
 };
 
@@ -76,7 +92,7 @@ export const deleteCase = async (caseId) => {
   const res = await fetch(`${API_BASE}/cases/${caseId}`, {
     method: 'DELETE',
   });
-  if (!res.ok) throw new Error('Failed to delete case');
+  await ensureOk(res, 'Failed to delete case');
   return res.json();
 };
 
@@ -92,7 +108,7 @@ export const updateSettings = async (settings) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(settings),
   });
-  if (!res.ok) throw new Error('Failed to save settings');
+  await ensureOk(res, 'Failed to save settings');
   return res.json();
 };
 

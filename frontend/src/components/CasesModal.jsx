@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, FolderLock, Plus, Trash2, Calendar, FileText } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 export default function CasesModal({
   isOpen,
@@ -10,6 +11,7 @@ export default function CasesModal({
   onCreateCase,
   onDeleteCase,
 }) {
+  const { t, lang } = useI18n();
   const [isCreating, setIsCreating] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -40,11 +42,13 @@ export default function CasesModal({
           <div className="flex items-center gap-2.5">
             <FolderLock className="w-4 h-4 text-white" />
             <h3 className="font-semibold text-sm text-white">
-              Investigation Workspaces
+              {t('cases.title')}
             </h3>
           </div>
           <button
             onClick={onClose}
+            title={t('cases.close')}
+            aria-label={t('cases.close')}
             className="p-1 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
           >
             <X className="w-4 h-4" />
@@ -56,37 +60,37 @@ export default function CasesModal({
           {isCreating ? (
             <form onSubmit={handleCreateSubmit} className="mb-5 p-4 rounded-lg bg-zinc-900/80 border border-white/10">
               <h4 className="text-xs font-semibold text-white uppercase tracking-wider font-mono mb-3">
-                New Investigation
+                {t('cases.newTitle')}
               </h4>
               <div className="flex flex-col gap-3">
                 <div>
-                  <label className="text-[11px] text-zinc-400 block mb-1 font-mono">Title</label>
+                  <label className="text-[11px] text-zinc-400 block mb-1 font-mono">{t('cases.name')}</label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Case #104 — Subject X"
+                    placeholder={t('cases.namePlaceholder')}
                     className="w-full bg-zinc-950 border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-white/40"
                     required
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] text-zinc-400 block mb-1 font-mono">Description</label>
+                  <label className="text-[11px] text-zinc-400 block mb-1 font-mono">{t('cases.description')}</label>
                   <input
                     type="text"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Brief objective..."
+                    placeholder={t('cases.descriptionPlaceholder')}
                     className="w-full bg-zinc-950 border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-white/40"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] text-zinc-400 block mb-1 font-mono">Notes</label>
+                  <label className="text-[11px] text-zinc-400 block mb-1 font-mono">{t('cases.notes')}</label>
                   <textarea
                     rows={2}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Target identifiers, background hypotheses..."
+                    placeholder={t('cases.notesPlaceholder')}
                     className="w-full bg-zinc-950 border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-white/40"
                   />
                 </div>
@@ -96,13 +100,13 @@ export default function CasesModal({
                     onClick={() => setIsCreating(false)}
                     className="px-3 py-1.5 rounded text-xs text-zinc-400 hover:text-white"
                   >
-                    Cancel
+                    {t('cases.cancel')}
                   </button>
                   <button
                     type="submit"
                     className="px-4 py-1.5 rounded text-xs font-semibold bg-white text-zinc-950 hover:bg-zinc-200"
                   >
-                    Save Case
+                    {t('cases.save')}
                   </button>
                 </div>
               </div>
@@ -110,14 +114,14 @@ export default function CasesModal({
           ) : (
             <div className="flex justify-between items-center mb-4">
               <span className="text-[11px] font-mono text-zinc-500 uppercase">
-                {cases.length} Recorded Investigations
+                {t('cases.recorded', { count: cases.length })}
               </span>
               <button
                 onClick={() => setIsCreating(true)}
                 className="flex items-center gap-1.5 px-3 py-1 rounded bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-semibold transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>New Case</span>
+                <span>{t('cases.new')}</span>
               </button>
             </div>
           )}
@@ -126,7 +130,7 @@ export default function CasesModal({
           <div className="flex flex-col gap-2">
             {cases.length === 0 ? (
               <div className="text-center py-8 text-zinc-500 text-xs font-mono">
-                No active cases. Create one to organize your searches.
+                {t('cases.empty')}
               </div>
             ) : (
               cases.map((c) => {
@@ -145,7 +149,7 @@ export default function CasesModal({
                         <span className="font-semibold text-xs text-white">{c.name}</span>
                         {isSelected && (
                           <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white text-zinc-950 font-bold">
-                            ACTIVE
+                            {t('cases.active')}
                           </span>
                         )}
                       </div>
@@ -155,12 +159,12 @@ export default function CasesModal({
                       <div className="flex items-center gap-3 mt-2 text-[10px] text-zinc-500 font-mono">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          {new Date(c.created_at * 1000).toLocaleDateString()}
+                          {new Date(c.created_at * 1000).toLocaleDateString(lang)}
                         </span>
                         {c.notes && (
                           <span className="flex items-center gap-1 text-zinc-400">
                             <FileText className="w-3 h-3" />
-                            Notes attached
+                            {t('cases.notesAttached')}
                           </span>
                         )}
                       </div>
@@ -172,13 +176,15 @@ export default function CasesModal({
                           onClick={() => onSelectCase(c)}
                           className="px-2.5 py-1 rounded text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors"
                         >
-                          Select
+                          {t('cases.select')}
                         </button>
                       )}
                       <button
-                        onClick={() => onDeleteCase(c.id)}
+                        onClick={() => {
+                          if (window.confirm(t('cases.confirmDelete', { name: c.name }))) onDeleteCase(c.id);
+                        }}
                         className="p-1.5 rounded text-zinc-500 hover:text-white hover:bg-zinc-800 transition-colors"
-                        title="Delete Case"
+                        title={t('cases.delete')}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>

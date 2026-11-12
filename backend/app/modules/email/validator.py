@@ -1,4 +1,3 @@
-import re
 from typing import AsyncGenerator
 import dns.asyncresolver
 import httpx

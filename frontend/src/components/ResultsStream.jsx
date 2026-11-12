@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { Search, CheckCircle2, XCircle, AlertCircle, Inbox, Loader2 } from 'lucide-react';
 import ResultCard from './ResultCard';
+import { useI18n } from '../i18n';
 
 export default function ResultsStream({ findings = [], isScanning }) {
+  const { t } = useI18n();
   const [statusFilter, setStatusFilter] = useState('found');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -62,7 +64,7 @@ export default function ResultsStream({ findings = [], isScanning }) {
                 : 'text-zinc-400 hover:text-white bg-zinc-900 border border-white/5'
             }`}
           >
-            <span>Found</span>
+            <span>{t('results.found')}</span>
             <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
               statusFilter === 'found' ? 'bg-zinc-200 text-zinc-950 font-bold' : 'bg-zinc-800 text-zinc-300'
             }`}>
@@ -78,7 +80,7 @@ export default function ResultsStream({ findings = [], isScanning }) {
                 : 'text-zinc-400 hover:text-white bg-zinc-900 border border-white/5'
             }`}
           >
-            <span>All Checks</span>
+            <span>{t('results.all')}</span>
             <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
               statusFilter === 'all' ? 'bg-zinc-200 text-zinc-950 font-bold' : 'bg-zinc-800 text-zinc-300'
             }`}>
@@ -94,7 +96,7 @@ export default function ResultsStream({ findings = [], isScanning }) {
                 : 'text-zinc-400 hover:text-white bg-zinc-900 border border-white/5'
             }`}
           >
-            <span>Not Found</span>
+            <span>{t('results.notFound')}</span>
             <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
               statusFilter === 'not_found' ? 'bg-zinc-200 text-zinc-950 font-bold' : 'bg-zinc-800 text-zinc-300'
             }`}>
@@ -110,7 +112,7 @@ export default function ResultsStream({ findings = [], isScanning }) {
                 : 'text-zinc-400 hover:text-white bg-zinc-900 border border-white/5'
             }`}
           >
-            <span>Errors</span>
+            <span>{t('results.errors')}</span>
             <span className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
               statusFilter === 'errors' ? 'bg-zinc-200 text-zinc-950 font-bold' : 'bg-zinc-800 text-zinc-300'
             }`}>
@@ -127,7 +129,7 @@ export default function ResultsStream({ findings = [], isScanning }) {
               onChange={(e) => setCategoryFilter(e.target.value)}
               className="bg-zinc-900 border border-white/10 text-zinc-300 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-white/30 font-mono"
             >
-              <option value="all">All Categories</option>
+              <option value="all">{t('results.allCategories')}</option>
               {categories.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -142,7 +144,7 @@ export default function ResultsStream({ findings = [], isScanning }) {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Filter results..."
+              placeholder={t('results.filter')}
               className="bg-zinc-900 border border-white/10 pl-8 pr-3 py-1.5 text-xs rounded-lg text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-white/30 w-36 sm:w-44 font-mono"
             />
           </div>
@@ -166,14 +168,14 @@ export default function ResultsStream({ findings = [], isScanning }) {
             )}
           </div>
           <h3 className="text-sm font-semibold text-white">
-            {isScanning ? 'Querying Target Across 130+ Sources...' : 'No Findings in this View'}
+            {isScanning ? t('results.scanningTitle') : t('results.emptyTitle')}
           </h3>
           <p className="text-xs text-zinc-400 max-w-sm mx-auto mt-1 font-mono">
             {isScanning
-              ? 'Asynchronous probes are streaming findings directly from public sources.'
+              ? t('results.scanningText')
               : statusFilter === 'found' && counts.found === 0 && counts.all > 0
-              ? 'No confirmed matches yet. Select "All Checks" to view full audit logs.'
-              : 'Enter a target query above to initiate automated reconnaissance.'}
+              ? t('results.noMatches')
+              : t('results.enterTarget')}
           </p>
         </div>
       )}

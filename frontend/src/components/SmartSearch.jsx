@@ -13,6 +13,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { detectEntity } from '../services/api';
+import { useI18n } from '../i18n';
 
 const TYPE_ICONS = {
   username: <User className="w-3.5 h-3.5 text-zinc-300" />,
@@ -38,6 +39,7 @@ export default function SmartSearch({
   isScanning, 
   availableModules = [] 
 }) {
+  const { t } = useI18n();
   const [query, setQuery] = useState('');
   const [detection, setDetection] = useState(null);
   const [showModuleSelector, setShowModuleSelector] = useState(false);
@@ -103,7 +105,7 @@ export default function SmartSearch({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Query identifier: username, email, phone, domain, IP, or hash..."
+              placeholder={t('search.placeholder')}
               disabled={isScanning}
               className="w-full pl-10 pr-28 py-3 bg-zinc-950/90 rounded-lg text-white placeholder-zinc-500 text-sm font-mono focus:outline-none focus:ring-1 focus:ring-white/40 border border-white/10 disabled:opacity-60 transition-all"
             />
@@ -114,6 +116,8 @@ export default function SmartSearch({
                 type="button"
                 onClick={() => { setQuery(''); setDetection(null); }}
                 className="absolute right-20 text-zinc-400 hover:text-white p-1"
+                title={t('search.clear')}
+                aria-label={t('search.clear')}
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -141,7 +145,7 @@ export default function SmartSearch({
                   ? 'bg-zinc-800 border-white/30 text-white'
                   : 'bg-zinc-950 border-white/10 text-zinc-400 hover:text-white hover:border-white/20'
               }`}
-              title="Modules"
+              title={t('search.modules')}
             >
               <SlidersHorizontal className="w-4 h-4" />
               {selectedModules.length > 0 && (
@@ -159,7 +163,7 @@ export default function SmartSearch({
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold border border-white/20 transition-all"
               >
                 <StopCircle className="w-4 h-4 text-rose-400" />
-                <span>Abort Scan</span>
+                <span>{t('search.abort')}</span>
               </button>
             ) : (
               <button
@@ -167,7 +171,7 @@ export default function SmartSearch({
                 disabled={!query.trim()}
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs shadow-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <span>Investigate</span>
+                <span>{t('search.investigate')}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             )}
@@ -179,14 +183,14 @@ export default function SmartSearch({
           <div className="mt-3 p-4 bg-zinc-950 border border-white/10 rounded-lg animate-fadeIn">
             <div className="flex items-center justify-between mb-3 pb-2 border-b border-white/5">
               <span className="text-xs font-semibold text-zinc-300 uppercase tracking-wider font-mono">
-                Active Modules ({availableModules.length})
+                {t('search.activeModules', { count: availableModules.length })}
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedModules([])}
                 className="text-xs text-zinc-400 hover:text-white underline font-mono"
               >
-                Reset to Auto-Recommend
+                {t('search.resetModules')}
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
@@ -221,8 +225,8 @@ export default function SmartSearch({
 
         {/* Presets & Info */}
         <div className="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between flex-wrap gap-2 text-xs">
-          <div className="flex items-center gap-1.5 text-zinc-400">
-            <span className="text-zinc-500 font-mono text-[11px]">Presets:</span>
+          <div className="flex flex-wrap items-center gap-1.5 text-zinc-400">
+            <span className="text-zinc-500 font-mono text-[11px]">{t('search.presets')}</span>
             {PRESETS.map((p) => (
               <button
                 key={p.value}
@@ -237,7 +241,7 @@ export default function SmartSearch({
 
           <div className="text-[11px] text-zinc-500 font-mono flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
-            <span>130+ Sources • Local & Self-Hosted • Zero External Logs</span>
+            <span>{t('search.info')}</span>
           </div>
         </div>
       </div>

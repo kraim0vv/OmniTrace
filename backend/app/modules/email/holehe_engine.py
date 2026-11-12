@@ -12,10 +12,10 @@ class HolehePresenceModule(BaseModule):
     author = "OmniTrace Core"
 
     async def _check_duolingo(self, email: str, scan_id: str, client: httpx.AsyncClient) -> Finding:
-        url = f"https://www.duolingo.com/2017-06-30/users?email={email}"
+        url = "https://www.duolingo.com/2017-06-30/users"
         headers = {"User-Agent": "Mozilla/5.0"}
         try:
-            resp = await client.get(url, headers=headers, timeout=6.0)
+            resp = await client.get(url, params={"email": email}, headers=headers, timeout=6.0)
             if resp.status_code == 200:
                 data = resp.json()
                 users = data.get("users", [])
@@ -55,39 +55,12 @@ class HolehePresenceModule(BaseModule):
                 description=str(e)
             )
 
-    async def _check_wordpress(self, email: str, scan_id: str, client: httpx.AsyncClient) -> Finding:
-        url = "https://public-api.wordpress.com/rest/v1.1/users"
-        try:
-            resp = await client.get(f"https://en.wordpress.com/wp-login.php", timeout=6.0)
-            # WordPress email check via gravatar/rest
-            return Finding(
-                scan_id=scan_id,
-                target=email,
-                target_type=TargetType.EMAIL,
-                category="Email Intel",
-                source="WordPress.com",
-                status=FindingStatus.INFO,
-                title="WordPress Account Probe",
-                description="Tested target email domain against Automattic account network.",
-                metadata={"checked": True}
-            )
-        except Exception:
-            return Finding(
-                scan_id=scan_id,
-                target=email,
-                target_type=TargetType.EMAIL,
-                category="Email Intel",
-                source="WordPress.com",
-                status=FindingStatus.NOT_FOUND,
-                title="Not Detected on WordPress",
-                description="No public account detected."
-            )
-
     async def _check_github(self, email: str, scan_id: str, client: httpx.AsyncClient) -> Finding:
-        url = f"https://api.github.com/search/users?q={email}+in:email"
+        url = "https://api.github.com/search/users"
+        params = {"q": f"{email} in:email"}
         headers = {"User-Agent": "OmniTrace-OSINT", "Accept": "application/vnd.github.v3+json"}
         try:
-            resp = await client.get(url, headers=headers, timeout=6.0)
+            resp = await client.get(url, params=params, headers=headers, timeout=6.0)
             if resp.status_code == 200:
                 data = resp.json()
                 total = data.get("total_count", 0)
@@ -104,7 +77,7 @@ class HolehePresenceModule(BaseModule):
                         status=FindingStatus.FOUND,
                         url=user_url,
                         title=f"Public GitHub Account: @{user_login}",
-                        description=f"GitHub account directly exposes this email in commits or profile.",
+                        description="GitHub account directly exposes this email in commits or profile.",
                         metadata={"login": user_login, "profile_url": user_url, "avatar": items[0].get("avatar_url")}
                     )
             return Finding(
@@ -139,7 +112,6 @@ class HolehePresenceModule(BaseModule):
         tasks = [
             self._check_duolingo(email, scan_id, client),
             self._check_github(email, scan_id, client),
-            self._check_wordpress(email, scan_id, client)
         ]
 
         for future in asyncio.as_completed(tasks):
